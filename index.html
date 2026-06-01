@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,
+  initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>KRONA Analytics — Simulado Agronegócio</title>
+<script src="https://telegram.org/js/telegram-web-app.js">
+</script>
+<link href="https://fonts.googleapis.com/css2?family=
+Inter:wght@400;500;600;700;800;900&display=swap"
+rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#060A13;
+  --bg2:#0B1120;
+  --sf:#101B2E;
+  --sf2:#152238;
+  --sf3:#1A2B48;
+  --bd:#1E3050;
+  --bd2:#264070;
+  --gold:#D4A84B;
+  --gold2:#E8C46E;
+  --gold3:#C49A3C;
+  --goldG:rgba(212,168,75,.06);
+  --goldG2:rgba(212,168,75,.12);
+  --grn:#22C55E;
+  --grnD:#16A34A;
+  --grnG:rgba(34,197,94,.08);
+  --red:#EF4444;
+  --redG:rgba(239,68,68,.08);
+  --blu:#3B82F6;
+  --vio:#8B5CF6;
+  --org:#F59E0B;
+  --txt:#E2E8F0;
+  --tx2:#94A3B8;
+  --tx3:#64748B;
+  --tx4:#475569;
+  --r:14px;
+  --rs:10px;
+  --sh:0 2px 12px rgba(0,0,0,.3);
+  --sh2:0 4px 24px rgba(0,0,0,.35);
+  --tr:.25s cubic-bezier(.4,0,.2,1)
+}
+html{background:var(--bg)}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--bg);color:var(--txt);
+  min-height:100vh;max-width:480px;
+  margin:0 auto;overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:90px;
+}
+
+/* ============ HEADER ============ */
+.hdr{
+  background:linear-gradient(170deg,
+    #0D1525 0%,var(--bg2) 100%);
+  position:sticky;top:0;z-index:100;
+  border-bottom:1px solid var(--bd);
+}
+.hdr-top{
+  display:flex;align-items:center;
+  justify-content:space-between;
+  padding:14px 18px 8px;
+}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-mark{
+  width:36px;height:36px;border-radius:8px;
+  background:linear-gradient(135deg,
+    var(--gold),var(--gold2));
+  display:flex;align-items:center;
+  justify-content:center;
+  box-shadow:0 2px 12px rgba(212,168,75,.25);
+}
+.brand-mark span{
+  font-size:16px;font-weight:900;
+  color:var(--bg);letter-spacing:-1px;
+}
+.brand-txt{display:flex;flex-direction:column}
+.brand-name{
+  font-size:17px;font-weight:900;
+  color:var(--gold);letter-spacing:2px;
+  line-height:1;
+}
+.brand-sub{
+  font-size:8px;font-weight:600;
+  color:var(--tx3);letter-spacing:2.5px;
+  text-transform:uppercase;margin-top:2px;
+}
+.usr{display:flex;align-items:center;gap:10px}
+.usr-info{text-align:right}
+.usr-lbl{
+  font-size:8px;color:var(--tx3);
+  font-weight:600;text-transform:uppercase;
+  letter-spacing:.5px;
+}
+.usr-nm{
+  font-size:12px;color:var(--txt);
+  font-weight:700;line-height:1.2;
+}
+.usr-xp-row{
+  display:flex;align-items:center;
+  gap:5px;justify-content:flex-end;
+  margin-top:2px;
+}
+.usr-xp{
+  font-size:11px;color:var(--gold);font-weight:700;
+}
+.lvl-pill{
+  background:linear-gradient(135deg,
+    var(--gold),var(--gold2));
+  color:var(--bg);font-size:8px;font-weight:900;
+  padding:2px 7px;border-radius:20px;
+  letter-spacing:.3px;
+}
+.usr-av{
+  width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(135deg,
+    var(--sf2),var(--sf3));
+  border:2px solid var(--bd);
+  display:flex;align-items:center;
+  justify-content:center;
+  font-size:13px;font-weight:800;color:var(--gold);
+}
+
+/* ============ PROGRESS STRIP ============ */
+.prog-strip{
+  padding:10px 18px 12px;
+  background:rgba(0,0,0,.2);
+}
+.prog-row{
+  display:flex;justify-content:space-between;
+  align-items:center;margin-bottom:5px;
+}
+.prog-t{
+  font-size:9px;color:var(--tx3);
+  font-weight:600;text-transform:uppercase;
+  letter-spacing:1.2px;
+}
+.prog-p{
+  font-size:13px;color:var(--gold);font-weight:800;
+}
+.prog-track{
+  background:var(--sf);border-radius:20px;
+  height:6px;overflow:hidden;
+}
+.prog-fill{
+  height:100%;border-radius:20px;
+  background:linear-gradient(90deg,
+    var(--gold3),var(--gold),var(--gold2));
+  transition:width .8s ease;
+}
+.prog-info{
+  text-align:center;margin-top:4px;
+  font-size:9px;color:var(--tx4);font-weight:500;
+}
+
+/* ============ CONTAINER ============ */
+.ctn{padding:14px 14px 24px}
+
+/* ============ STATS ============ */
+.stats{
+  display:grid;grid-template-columns:1fr 1fr 1fr;
+  gap:8px;margin-bottom:16px;
+}
+.st{
+  background:var(--sf);border:1px solid var(--bd);
+  border-radius:var(--rs);padding:14px 8px;
+  text-align:center;position:relative;
+  overflow:hidden;
+}
+.st::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:2px;
+}
+.st:nth-child(1)::before{
+  background:linear-gradient(90deg,var(--grn),#4ADE80)}
+.st:nth-child(2)::before{
+  background:linear-gradient(90deg,var(--blu),#60A5FA)}
+.st:nth-child(3)::before{
+  background:linear-gradient(90deg,var(--gold),var(--gold2))}
+.st-ic{font-size:18px;margin-bottom:4px}
+.st-v{font-size:22px;font-weight:900;line-height:1}
+.st:nth-child(1) .st-v{color:var(--grn)}
+.st:nth-child(2) .st-v{color:var(--blu)}
+.st:nth-child(3) .st-v{color:var(--gold)}
+.st-l{
+  font-size:8px;color:var(--tx3);font-weight:700;
+  text-transform:uppercase;letter-spacing:.6px;
+  margin-top:4px;
+}
+
+/* ============ PANEL ============ */
+.pnl{
+  background:var(--sf);border:1px solid var(--bd);
+  border-radius:var(--r);margin-bottom:16px;
+  overflow:hidden;
+}
+.pnl-h{
+  padding:14px 16px 12px;
+  display:flex;align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--bd);
+}
+.pnl-tg{display:flex;align-items:center;gap:8px}
+.pnl-ic{font-size:16px}
+.pnl-tt{
+  font-size:13px;font-weight:800;
+  color:var(--txt);letter-spacing:-.2px;
+}
+.pnl-badge{
+  font-size:8px;font-weight:700;
+  padding:3px 8px;border-radius:20px;
+  text-transform:uppercase;letter-spacing:.5px;
+}
+.bg-gold{background:var(--goldG2);color:var(--gold)}
+.bg-grn{background:var(--grnG);color:var(--grn)}
+.pnl-b{padding:14px 16px}
+
+/* ============ CHART ============ */
+.chart{
+  display:flex;align-items:flex-end;
+  justify-content:center;gap:6px;
+  height:90px;margin-bottom:14px;padding:0 6px;
+}
+.cht-g{
+  display:flex;flex-direction:column;
+  align-items:center;gap:3px;flex:1;
+}
+.cht-w{
+  width:100%;height:72px;background:var(--bg2);
+  border-radius:4px 4px 0 0;
+  display:flex;align-items:flex-end;
+  overflow:hidden;position:relative;
+}
+.cht-b{
+  width:100%;border-radius:4px 4px 0 0;
+  transition:height .8s cubic-bezier(.34,1.56,.64,1);
+}
+.cht-v{
+  position:absolute;top:3px;left:50%;
+  transform:translateX(-50%);
+  font-size:8px;font-weight:800;color:var(--tx2);
+}
+.cht-l{
+  font-size:7px;color:var(--tx4);font-weight:700;
+  text-transform:uppercase;letter-spacing:.2px;
+}
+
+/* ============ METRICS ============ */
+.met-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;
+}
+.met{
+  padding:12px;border-radius:var(--rs);
+  background:var(--bg2);
+  border:1px solid rgba(30,48,80,.5);
+}
+.met-l{
+  font-size:8px;color:var(--tx3);font-weight:700;
+  text-transform:uppercase;letter-spacing:.6px;
+}
+.met-r{
+  display:flex;align-items:baseline;
+  gap:3px;margin-top:4px;
+}
+.met-v{
+  font-size:20px;font-weight:900;color:var(--txt);
+}
+.met-u{font-size:10px;color:var(--tx3);font-weight:600}
+.met-s{font-size:9px;font-weight:600;margin-top:2px}
+.met-s.pos{color:var(--grn)}
+.met-s.neg{color:var(--red)}
+.met-s.neu{color:var(--tx3)}
+
+/* ============ SECTION HEADER ============ */
+.sec-h{
+  display:flex;align-items:center;
+  justify-content:space-between;
+  margin:20px 0 12px;padding:0 2px;
+}
+.sec-l{display:flex;align-items:center;gap:6px}
+.sec-tt{
+  font-size:12px;font-weight:800;color:var(--gold);
+  text-transform:uppercase;letter-spacing:1px;
+}
+.sec-c{font-size:10px;color:var(--tx3);font-weight:600}
+
+/* ============ MODULES (ACCORDION) ============ */
+.mod{
+  background:var(--sf);border:1px solid var(--bd);
+  border-radius:var(--r);margin-bottom:8px;
+  overflow:hidden;
+  transition:border-color var(--tr);
+}
+.mod.open{border-color:var(--bd2)}
+.mod-h{
+  padding:14px 16px;display:flex;
+  align-items:center;justify-content:space-between;
+  cursor:pointer;
+  transition:background var(--tr);
+  -webkit-tap-highlight-color:transparent;
+}
+.mod-h:active{background:rgba(255,255,255,.02)}
+.mod-left{
+  display:flex;align-items:center;
+  gap:12px;flex:1;min-width:0;
+}
+.mod-icon{
+  width:40px;height:40px;border-radius:10px;
+  display:flex;align-items:center;
+  justify-content:center;font-size:20px;
+  flex-shrink:0;
+}
+.mod-icon.agro{
+  background:rgba(34,197,94,.08);
+  box-shadow:inset 0 0 0 1px rgba(34,197,94,.15);
+}
+.mod-icon.veg{
+  background:rgba(16,185,129,.08);
+  box-shadow:inset 0 0 0 1px rgba(16,185,129,.15);
+}
+.mod-icon.agua{
+  background:rgba(59,130,246,.08);
+  box-shadow:inset 0 0 0 1px rgba(59,130,246,.15);
+}
+.mod-icon.cult{
+  background:rgba(245,158,11,.08);
+  box-shadow:inset 0 0 0 1px rgba(245,158,11,.15);
+}
+.mod-icon.anim{
+  background:rgba(239,68,68,.08);
+  box-shadow:inset 0 0 0 1px rgba(239,68,68,.15);
+}
+.mod-icon.gen{
+  background:rgba(139,92,246,.08);
+  box-shadow:inset 0 0 0 1px rgba(139,92,246,.15);
+}
+.mod-icon.tech{
+  background:rgba(6,182,212,.08);
+  box-shadow:inset 0 0 0 1px rgba(6,182,212,.15);
+}
+.mod-icon.bonus{
+  background:var(--goldG);
+  box-shadow:inset 0 0 0 1px rgba(212,168,75,.15);
+}
+.mod-det{flex:1;min-width:0}
+.mod-nm{
+  font-size:13px;font-weight:800;
+  color:var(--txt);line-height:1.2;
+}
+.mod-tutor{
+  display:flex;align-items:center;
+  gap:6px;margin-top:4px;
+}
+.tutor-av{
+  width:18px;height:18px;border-radius:50%;
+  background:var(--sf3);
+  display:flex;align-items:center;
+  justify-content:center;
+  font-size:7px;font-weight:800;color:var(--tx2);
+}
+.tutor-nm{
+  font-size:10px;color:var(--tx3);font-weight:600;
+}
+.mod-right{
+  display:flex;align-items:center;gap:10px;
+}
+.mod-prog{
+  font-size:10px;font-weight:700;color:var(--tx3);
+}
+.mod-prog .done{color:var(--grn)}
+.mod-chev{
+  font-size:14px;color:var(--tx4);
+  transition:transform .3s ease;
+  line-height:1;
+}
+.mod.open .mod-chev{transform:rotate(90deg)}
+
+/* ============ MODULE CONTENT ============ */
+.mod-body{
+  max-height:0;overflow:hidden;
+  transition:max-height .4s ease;
+}
+.mod.open .mod-body{max-height:600px}
+.mod-inner{
+  padding:0 12px 12px;
+  border-top:1px solid var(--bd);
+}
+
+/* ============ TEMA ITEMS ============ */
+.tema{
+  display:flex;align-items:center;
+  gap:12px;padding:12px;
+  border-radius:var(--rs);
+  cursor:pointer;margin-top:6px;
+  transition:background var(--tr);
+  -webkit-tap-highlight-color:transparent;
+}
+.tema:active{background:rgba(255,255,255,.03)}
+.tema-ic{
+  width:36px;height:36px;border-radius:8px;
+  background:var(--bg2);
+  display:flex;align-items:center;
+  justify-content:center;font-size:18px;
+  flex-shrink:0;
+}
+.tema-det{flex:1;min-width:0}
+.tema-tag{
+  font-size:8px;font-weight:800;
+  text-transform:uppercase;letter-spacing:.8px;
+}
+.tema-tag.agro{color:var(--grn)}
+.tema-tag.veg{color:#10B981}
+.tema-tag.agua{color:var(--blu)}
+.tema-tag.cult{color:var(--org)}
+.tema-tag.anim{color:var(--red)}
+.tema-tag.gen{color:var(--vio)}
+.tema-tag.tech{color:#06B6D4}
+.tema-tag.bonus{color:var(--gold)}
+.tema-nm{
+  font-size:13px;font-weight:700;
+  color:var(--txt);line-height:1.3;
+  margin-top:1px;
+  white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis;
+}
+.tema-ct{
+  font-size:9px;color:var(--tx4);
+  font-weight:500;margin-top:2px;
+}
+.tema-st{flex-shrink:0}
+.badge-sc{
+  font-size:10px;font-weight:800;
+  padding:3px 8px;border-radius:6px;
+}
+.badge-sc.done{background:var(--grnG);color:var(--grn)}
+.badge-sc.wait{background:rgba(100,116,139,.1);color:var(--tx3)}
+.badge-sc.lock{background:var(--goldG);color:var(--gold3)}
+.tema-arr{
+  color:var(--tx4);font-size:14px;flex-shrink:0;
+  transition:transform .15s ease;
+}
+.tema:active .tema-arr{transform:translateX(2px)}
+
+/* ============ BOTTOM NAV ============ */
+.bnav{
+  position:fixed;bottom:0;left:0;right:0;
+  max-width:480px;margin:0 auto;
+  background:var(--bg2);
+  border-top:1px solid var(--bd);
+  display:flex;justify-content:space-around;
+  padding:6px 0 max(10px,env(safe-area-inset-bottom));
+  z-index:100;
+}
+.nav-i{
+  display:flex;flex-direction:column;
+  align-items:center;gap:2px;
+  padding:6px 14px;border-radius:10px;
+  cursor:pointer;transition:all .15s ease;
+  position:relative;
+  -webkit-tap-highlight-color:transparent;
+}
+.nav-i.act{color:var(--gold)}
+.nav-i.act::before{
+  content:'';position:absolute;top:-6px;
+  width:16px;height:2px;border-radius:2px;
+  background:var(--gold);
+}
+.nav-i:not(.act){color:var(--tx4)}
+.nav-ic{font-size:18px;line-height:1}
+.nav-lb{
+  font-size:8px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.3px;
+}
+.nav-dot{
+  position:absolute;top:3px;right:6px;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--red);color:#fff;
+  font-size:7px;font-weight:800;
+  display:flex;align-items:center;
+  justify-content:center;
+}
+
+/* ============ TOAST ============ */
+.toast{
+  position:fixed;top:80px;left:50%;
+  transform:translateX(-50%) translateY(-16px);
+  background:var(--sf2);border:1px solid var(--bd2);
+  color:var(--gold);padding:10px 22px;
+  border-radius:10px;font-size:12px;font-weight:700;
+  opacity:0;transition:all .3s ease;z-index:200;
+  pointer-events:none;box-shadow:var(--sh2);
+}
+.toast.show{
+  opacity:1;transform:translateX(-50%) translateY(0);
+}
+
+/* ============ ANIMATIONS ============ */
+.st,.pnl,.mod{
+  animation:fadeUp .5s ease both;
+}
+.mod:nth-child(1){animation-delay:.02s}
+.mod:nth-child(2){animation-delay:.05s}
+.mod:nth-child(3){animation-delay:.08s}
+.mod:nth-child(4){animation-delay:.11s}
+.mod:nth-child(5){animation-delay:.14s}
+.mod:nth-child(6){animation-delay:.17s}
+.mod:nth-child(7){animation-delay:.20s}
+.mod:nth-child(8){animation-delay:.23s}
+.mod:nth-child(9){animation-delay:.26s}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:translateY(0)}
+}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{
+  background:var(--bd);border-radius:10px;
+}
+</style>
+</head>
+<body>
+
+<!-- ========== HEADER ========== -->
+<div class="hdr">
+  <div class="hdr-top">
+    <div class="brand">
+      <div class="brand-mark"><span>K</span></div>
+      <div class="brand-txt">
+        <span class="brand-name">KRONA</span>
+        <span class="brand-sub">Analytics</span>
+      </div>
+    </div>
+    <div class="usr">
+      <div class="usr-info">
+        <div class="usr-lbl">Aluno</div>
+        <div class="usr-nm" id="uName">Pedro Silva</div>
+        <div class="usr-xp-row">
+          <span class="usr-xp" id="uXP">1.250 XP</span>
+          <span class="lvl-pill" id="uLvl">Lv.12</span>
+        </div>
+      </div>
+      <div class="usr-av" id="uAv">PS</div>
+    </div>
+  </div>
+  <div class="prog-strip">
+    <div class="prog-row">
+      <span class="prog-t">Progresso Geral</span>
+      <span class="prog-p" id="pPct">47%</span>
+    </div>
+    <div class="prog-track">
+      <div class="prog-fill" id="pFill"
+           style="width:47%"></div>
+    </div>
+    <div class="prog-info" id="pInfo">
+      7 de 15 módulos concluídos
+    </div>
+  </div>
+</div>
+
+<!-- ========== CONTEÚDO ========== -->
+<div class="ctn">
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="st">
+      <div class="st-ic">✅</div>
+      <div class="st-v" id="sHits">87</div>
+      <div class="st-l">Acertos</div>
+    </div>
+    <div class="st">
+      <div class="st-ic">📝</div>
+      <div class="st-v" id="sTot">116</div>
+      <div class="st-l">Questões</div>
+    </div>
+    <div class="st">
+      <div class="st-ic">🎯</div>
+      <div class="st-v" id="sPct">75%</div>
+      <div class="st-l">Aproveit.</div>
+    </div>
+  </div>
+
+  <!-- PAINEL DESEMPENHO -->
+  <div class="pnl">
+    <div class="pnl-h">
+      <div class="pnl-tg">
+        <span class="pnl-ic">📊</span>
+        <span class="pnl-tt">Desempenho por Área</span>
+      </div>
+      <span class="pnl-badge bg-gold">Avançado</span>
+    </div>
+    <div class="pnl-b">
+      <div class="chart">
+        <div class="cht-g">
+          <div class="cht-w">
+            <div class="cht-v">82%</div>
+            <div class="cht-b" style="height:82%;
+              background:linear-gradient(180deg,
+              #22C55E,#4ADE80)"></div>
+          </div>
+          <span class="cht-l">Agro</span>
+        </div>
+        <div class="cht-g">
+          <div class="cht-w">
+            <div class="cht-v">73%</div>
+            <div class="cht-b" style="height:73%;
+              background:linear-gradient(180deg,
+              #10B981,#34D399)"></div>
+          </div>
+          <span class="cht-l">Veg.</span>
+        </div>
+        <div class="cht-g">
+          <div class="cht-w">
+            <div class="cht-v">91%</div>
+            <div class="cht-b" style="height:91%;
+              background:linear-gradient(180deg,
+              #3B82F6,#60A5FA)"></div>
+          </div>
+          <span class="cht-l">Água</span>
+        </div>
+        <div class="cht-g">
+          <div class="cht-w">
+            <div class="cht-v">75%</div>
+            <div class="cht-b" style="height:75%;
+              background:linear-gradient(180deg,
+              #F59E0B,#FBBF24)"></div>
+          </div>
+          <span class="cht-l">Cult.</span>
+        </div>
+        <div class="cht-g">
+          <div class="cht-w">
+            <div class="cht-v">59%</div>
+            <div class="cht-b" style="height:59%;
+              background:linear-gradient(180deg,
+              #EF4444,#F87171)"></div>
+          </div>
+          <span class="cht-l">Anim.</span>
+        </div>
+        <div class="cht-g">
+          <div class="cht-w">
+            <div class="cht-v">85%</div>
+            <div class="cht-b" style="height:85%;
+              background:linear-gradient(180deg,
+              #06B6D4,#22D3EE)"></div>
+          </div>
+          <span class="cht-l">Tech</span>
+        </div>
+      </div>
+      <div class="met-grid">
+        <div class="met">
+          <div class="met-l">Melhor Nota</div>
+          <div class="met-r">
+            <span class="met-v">9.3</span>
+            <span class="met-u">/10</span>
+          </div>
+          <div class="met-s pos">
+            T5 — Irrigação</div>
+        </div>
+        <div class="met">
+          <div class="met-l">Sequência</div>
+          <div class="met-r">
+            <span class="met-v">5</span>
+            <span class="met-u">dias</span>
+          </div>
+          <div class="met-s pos">
+            🔥 Recorde pessoal</div>
+        </div>
+        <div class="met">
+          <div class="met-l">Tempo Médio</div>
+          <div class="met-r">
+            <span class="met-v">2:34</span>
+            <span class="met-u">min</span>
+          </div>
+          <div class="met-s neu">Por questão</div>
+        </div>
+        <div class="met">
+          <div class="met-l">Erros Salvos</div>
+          <div class="met-r">
+            <span class="met-v">29</span>
+            <span class="met-u">itens</span>
+          </div>
+          <div class="met-s neg">Revisar ⚠</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEÇÃO MÓDULOS -->
+  <div class="sec-h">
+    <div class="sec-l">
+      <span class="sec-tt">◆ Módulos do Simulado</span>
+    </div>
+    <span class="sec-c">7/15 temas</span>
+  </div>
+
+  <!-- ===== MOD A ===== -->
+  <div class="mod open" id="modA">
+    <div class="mod-h" onclick="tglMod('A')">
+      <div class="mod-left">
+        <div class="mod-icon agro">🌾</div>
+        <div class="mod-det">
+          <div class="mod-nm">
+            Agronegócio &amp; Sustentabilidade</div>
+          <div class="mod-tutor">
+            <div class="tutor-av">RM</div>
+            <span class="tutor-nm">
+              Prof. Ricardo Mendes</span>
+          </div>
+        </div>
+      </div>
+      <div class="mod-right">
+        <div class="mod-prog">
+          <span class="done">2</span>/2</div>
+        <div class="mod-chev">▸</div>
+      </div>
+    </div>
+    <div class="mod-body">
+      <div class="mod-inner">
+        <div class="tema"
+             onclick="startQuiz('TEMA_1',
+             'Contextualização do Agronegócio')">
+          <div class="tema-ic">🌾</div>
+          <div class="tema-det">
+            <div class="tema-tag agro">Tema 1</div>
+            <div class="tema-nm">
+              Contextualização do Agronegócio</div>
+            <div class="tema-ct">15 questões</div>
+          </div>
+          <div class="tema-st">
+            <span class="badge-sc done">8.7</span>
+          </div>
+          <span class="tema-arr">›</span>
+        </div>
+        <div class="tema"
+             onclick="startQuiz('TEMA_2',
+             'Sistemas de Produção Sustentável')">
+          <div class="tema-ic">🌱</div>
+          <div class="tema-det">
+            <div class="tema-tag agro">Tema 2</div>
+            <div class="tema-nm">
+              Sistemas de Produção Sustentável</div>
+            <div class="tema-ct">15 questões</div>
+          </div>
+          <div class="tema-st">
+            <span class="badge-sc done">7.3</span>
+          </div>
+          <span class="tema-arr">›</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MOD B ===== -->
+  <div class="mod" id="modB">
+    <div class="mod-h" onclick="tglMod('B')">
+      <div class="mod-left">
+        <div class="mod-icon veg">🌿</div>
+        <div class="mod-det">
+          <div class="mod-nm">
+            Ciências Vegetais &amp; Solo</div>
+          <div class="mod-tutor">
+            <div class="tutor-av">AB</div>
+            <span class="tutor-nm">
+              Profa. Ana Beatriz</span>
+          </div>
+        </div>
+      </div>
+      <div class="mod-right">
+        <div class="mod-prog">
+          <span class="done">2</span>/2</div>
+        <div class="mod-chev">▸</div>
+      </div>
+    </div>
+    <div class="mod-body">
+      <div class="mod-inner">
+        <div class="tema"
+             onclick="startQuiz('TEMA_3',
+             'Fundamentos de Botânica')">
+          <div class="tema-ic">🌿</div>
+          <div class="tema-det">
+            <div class="tema-tag veg">Tema 3</div>
+            <div class="tema-nm">
+              Fundamentos de Botânica</div>
+            <div class="tema-ct">15 questões</div>
+          </div>
+          <div class="tema-st">
+            <span class="badge-sc done">6.0</span>
+          </div>
+          <span class="tema-arr">›</span>
+        </div>
+        <div class="tema"
+             onclick="startQuiz('TEMA_4',
+             'Nutrição Mineral e Fertilidade')">
+          <div class="tema-ic">🧪</div>
+          <div class="tema-det">
+            <div class="tema-tag veg">Tema 4</div>
+            <div class="tema-nm">
+              Nutrição Mineral e Fertilidade</div>
+            <div class="tema-ct">15 questões</div>
+          </div>
+          <div class="tema-st">
+            <span class="badge-sc done">9.3</span>
+          </div>
+          <span class="tema-arr">›</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MOD C ===== -->
+  <div class="mod" id="modC">
+    <div class="mod-h" onclick="tglMod('C')">
+      <div class="mod-left">
+        <div class="mod-icon agua">💧</div>
+        <div class="mod-det">
+          <div class="mod-nm">Recursos Hídricos</div>
+          <div class="mod-tutor">
+            <div class="tutor-av">CE</div>
+            <span class="tutor-nm">
+              Prof. Carlos Eduardo</span>
+          </div>
+        </div>
+      </div>
+      <div class="mod-right">
+        <div class="mod-prog">
+          <span class="done">1</span>/1</div>
+        <div class="mod-chev">▸</div>
+      </div>
+    </div>
+    <div class="mod-body">
+      <div class="mod-inner">
+        <div class="tema"
+             onclick="startQuiz('TEMA_5',
+             'Irrigação e Drenagem')">
+          <div class="tema-ic">💧</div>
+          <div class="tema-det">
+            <div class="tema-tag agua">Tema 5</div>
+            <div class="tema-nm">
+              Irrigação e Drenagem</div>
+            <div class="tema-ct">15 questões</div>
+          </div>
+          <div class="tema-st">
+            <span class="badge-sc done">9.3</span>
+          </div>
+          <span class="tema-arr">›</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MOD D ===== -->
+  <div class="mod" id="modD">
+    <div class="mod-h" onclick="tglMod('D')">
+      <div class="mod-left">
+        <div class="mod-icon cult">🌽</div>
+        <div class="mod-det">
+          <div class="mod-nm">
+            Culturas Agrícolas</div>
+          <div class="mod-tutor">
+            <div class="tutor-av">MC</div>
+            <span class="tutor-nm">
+              Profa. Marina Costa</span>
+          </div>
+        </div>
+      </div>
+      <div class="mod-right">
+        <div class="mod-prog">
+          <span class="done">1</span>/1</div>
+        <div class="mod-chev">▸</div>
+      </div>
+    </div>
+    <div class="mod-body">
+      <div class="mod-inner">
+        <div class="tema"
+             onclick="startQuiz('TEMA_6',
+             'Principais Culturas')">
+          <div class="tema-ic">🌽</div>
+          <div class="tema-det">
+            <div class="tema-tag cult">Tema 6</div>
+            <div class="tema-nm">
+              Principais Culturas</div>
+            <div class="tema-ct">20 questões</div>
+          </div>
+          <div class="tema-st">
+            <span class="badge-sc done">7.5</span>
+          </div>
+          <span class="tema-arr">›</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MOD E ===== -->
+  <div class="mod" id="modE">
+    <div class="mod-h" onclick="tglMod('E')">
+      <div class="mod-left">
+        <div class="mod-icon anim">🐄</div>
+        <div class="mod-det">
+          <div class="mod-nm">
+            Produção Animal I</div>
+          <div class="mod-tutor">
+            <div class="tutor-av">JA</div>
+            <span class="tutor-nm">
+              Prof. João Augusto</span>
+          </div>
+        </div>
+      </div>
+      <div class="mod-right">
+        <div class="mod-prog">
+          <span class="done">1</span>/3</div>
+        <div class="mod-chev">▸</div>
+      </div>
+    </div>
+    <div class="mod-body">
+      <div class="mod-inner">
+        <div class="tema"
+             onclick="startQuiz('TEMA_7',
+             'Produção Animal no Agronegócio')">
+          <div class="tema-ic">🐄</div>
+          <div class="tema-det">
+            <div class="tema-tag anim">Tema 7</div>
+            <div class="tema-nm">
+              Produção Animal no Agronegócio</div>
+            <div class="tema-ct">20 questões</div>
+          </div>
+          <div class="tema-st">
+            <span class="badge-sc done">6.5</span>
+          </div>
+          <span class="tema-arr">›</span>
+        </div>
+        <div class="tema"
+             onclick="startQuiz('TEMA_8',
+             'Anatomia e Fisiologia Animal')">
+          <div class="tema-ic">🔬</div>
+          <div class="tema-det">
+            <div class="tema-tag anim">
+              Tema 8 — Próximo</div>
+            <div class="tema-nm">
+              Anatomia e Fisiologia Animal</div>
+            <div class="tema-ct">15 questões</div>
+          </div>
+          <div class="tema-st">
+            <span class="badge-sc wait">
+              Iniciar</span>
+          </div>
+          <span class="tema-arr">›</span>
+        </div>
+        <div class="tema"
+             onclick="startQuiz('TEMA_9',
+             'Alimentação e Nutrição Animal')">
+          <div class="tema-ic">🍽️</div>
+          <div class="tema-det">
+            <div class="tema-tag anim">Tema 9</div>
+            <div class="tema-nm">
+              Alimentação e Nutrição Animal</div>
+            <div class="tema-ct">15 questões</div>
+          </div>
+          <div class="tema-st">
+            <span class="badge-sc wait">
+              Pendente</span>
+          </div>
+          <span class="tema-arr">›</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MOD F ===== -->
+  <div class="mod" id="modF">
+    <div class="mod-h" onclick="tglMod('F')">
+      <div class="mod-left">
+        <div class="mod-icon gen">🧬</div>
+        <div class="mod-det">
+          <div class="mod-nm">
+            Forragem &amp; Genética</div>
+          <div class="mod-tutor">
+            <div class="tutor-av">FL</div>
+            <span class="tutor-nm">
+              Profa. Fernanda Lima</span>
+          </div>
+        </div>
+      </div>
+      <div class="mod-right">
+        <div class="mod-prog">0/2</div>
+        <div class="mod-chev">▸</div>
+      </div>
+    </div>
+    <div class="mod-body">
+      <div class="mod-inner">
+        <div class="tema"
+             onclick="startQuiz('TEMA_10',
+             'Forragicultura e Pastagens')">
+          <div class="tema-ic">🌾</div>
+          <div class="tema-det">
+            <div class="tema-tag gen">Tema 10</div>
+            <div class="tema-nm">
+              Forragicultura e Pastagens</div>
+            <div class="tema-ct">20 questões</div>
+          </div>
+          <div class="tema-st">
+            <span class="badge-sc wait">
+              Pendente</span>
+          </div>
+          <span class="tema-arr">›</span>
+        </div>
+        <div class="tema"
+             onclick="startQuiz('TEMA_11',
+             'Melhoramento Genético Animal')">
+          <div class="tema-ic">🧬</div>
+          <div class="tema-det">
+            <div class="tema-tag gen">Tema 11</div>
+            <div class="tema-nm">
+              Melhoramento Genético Animal</div>
+            <div class="tema-ct">15 questões</div>
+          </div>
+          <div class="tema-st">
+            <span class="badge-sc wait">
+              Pendente</span>
+          </div>
+          <span class="tema-arr">›</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MOD G ===== -->
+  <div class="mod" id="modG">
+    <div class="mod-h" onclick="tglMod('G')">
+      <div class="mod-left">
+        <div class="mod-icon anim">🐔</div>
+        <div class="mod-det">
+          <div class="mod-nm">
+            Produção Animal II</div>
+          <div class="mod-tutor">
+            <div class="tutor-av">TR</div>
+            <span class="tutor-nm">
+              Prof. Thiago Ramos</span>
+          </div>
+        </div>
+      </div>
+      <div class="mod-right">
+        <div class="mod-prog">0/2</div>
+        <div class="mod-chev">▸</div>
+      </div>
+    </div>
+    <div class="mod-body">
+      <div class="mod-inner">
+        <div class="tema"
+             onclick="startQuiz('TEMA_12',
+             'Produção de Monogástricos')">
+          <div class="tema-ic">🐔</div>
+          <div class="tema-det">
+            <div class="tema-tag anim">
+              Tema 12</div>
+            <div class="tema-nm">
+              Produção de Animais Monogástricos</div>
+            <div class="tema-ct">20 questões</div>
+          </div>
+          <div class="tema-st">
+            <span class="badge-sc wait">
+              Pendente</span>
+          </div>
+          <span class="tema-arr">›</span>
+        </div>
+        <div class="tema"
+             onclick="startQuiz('TEMA_13',
+             'Produção de Ruminantes')">
+          <div class="tema-ic">🐮</div>
+          <div class="tema-det">
+            <div class="tema-tag anim">
+              Tema 13</div>
+            <div class="tema-nm">
+              Produção de Animais Ruminantes</div>
+            <div class="tema-ct">20 questões</div>
+          </div>
+          <div class="tema-st">
+            <span class="badge-sc wait">
+              Pendente</span>
+          </div>
+          <span class="tema-arr">›</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MOD H ===== -->
+  <div class="mod" id="modH">
+    <div class="mod-h" onclick="tglMod('H')">
+      <div class="mod-left">
+        <div class="mod-icon tech">📡</div>
+        <div class="mod-det">
+          <div class="mod-nm">
+            Tecnologia &amp; Precisão</div>
+          <div class="mod-tutor">
+            <div class="tutor-av">LA</div>
+            <span class="tutor-nm">
+              Prof. Lucas Andrade</span>
+          </div>
+        </div>
+      </div>
+      <div class="mod-right">
+        <div class="mod-prog">0/1</div>
+        <div class="mod-chev">▸</div>
+      </div>
+    </div>
+    <div class="mod-body">
+      <div class="mod-inner">
+        <div class="tema"
+             onclick="startQuiz('TEMA_14',
+             'Agricultura de Precisão')">
+          <div class="tema-ic">📡</div>
+          <div class="tema-det">
+            <div class="tema-tag tech">
+              Tema 14</div>
+            <div class="tema-nm">
+              Agricultura de Precisão</div>
+            <div class="tema-ct">20 questões</div>
+          </div>
+          <div class="tema-st">
+            <span class="badge-sc wait">
+              Pendente</span>
+          </div>
+          <span class="tema-arr">›</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MOD BÔNUS ===== -->
+  <div class="mod" id="modX">
+    <div class="mod-h" onclick="tglMod('X')">
+      <div class="mod-left">
+        <div class="mod-icon bonus">🎁</div>
+        <div class="mod-det">
+          <div class="mod-nm">
+            Simulado Bônus Especial</div>
+          <div class="mod-tutor">
+            <div class="tutor-av"
+                 style="background:var(--goldG2);
+                 color:var(--gold)">K</div>
+            <span class="tutor-nm">
+              Equipe KRONA Analytics</span>
+          </div>
+        </div>
+      </div>
+      <div class="mod-right">
+        <div class="mod-prog">0/1</div>
+        <div class="mod-chev">▸</div>
+      </div>
+    </div>
+    <div class="mod-body">
+      <div class="mod-inner">
+        <div class="tema"
+             onclick="startQuiz('TEMA_15',
+             'Simulado Bônus')">
+          <div class="tema-ic">🎁</div>
+          <div class="tema-det">
+            <div class="tema-tag bonus">
+              Tema 15 — Bônus</div>
+            <div class="tema-nm">
+              Simulado Bônus Multidisciplinar</div>
+            <div class="tema-ct">16 questões</div>
+          </div>
+          <div class="tema-st">
+            <span class="badge-sc lock">
+              🔒 Especial</span>
+          </div>
+          <span class="tema-arr"
+                style="color:var(--gold)">›</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- .ctn -->
+
+<!-- ========== BOTTOM NAV ========== -->
+<div class="bnav">
+  <div class="nav-i act" id="nHome">
+    <span class="nav-ic">🏠</span>
+    <span class="nav-lb">Início</span>
+  </div>
+  <div class="nav-i" id="nRank">
+    <span class="nav-ic">🏆</span>
+    <span class="nav-lb">Ranking</span>
+  </div>
+  <div class="nav-i" id="nErr">
+    <span class="nav-ic">📓</span>
+    <span class="nav-lb">Erros</span>
+    <span class="nav-dot">29</span>
+  </div>
+  <div class="nav-i" id="nProf">
+    <span class="nav-ic">👤</span>
+    <span class="nav-lb">Perfil</span>
+  </div>
+</div>
+
+<!-- ========== TOAST ========== -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ========================================
+   KRONA Analytics — Mini App Controller
+   ======================================== */
+
+// Telegram WebApp
+const tg = window.Telegram?.WebApp;
+
+if (tg) {
+  tg.ready();
+  tg.expand();
+  tg.setHeaderColor('#0B1120');
+  tg.setBackgroundColor('#060A13');
+
+  // Preencher dados do usuário real
+  const u = tg.initDataUnsafe?.user;
+  if (u) {
+    document.getElementById('uName')
+      .textContent = u.first_name || 'Aluno';
+    const ini = (u.first_name || 'A')[0] +
+      (u.last_name || '')[0] || '';
+    document.getElementById('uAv')
+      .textContent = ini.toUpperCase();
+  }
+}
+
+// ====== ACCORDION ======
+function tglMod(id) {
+  const el = document.getElementById('mod' + id);
+  const wasOpen = el.classList.contains('open');
+
+  // Fechar todos primeiro (comportamento acordeão)
+  document.querySelectorAll('.mod').forEach(m => {
+    m.classList.remove('open');
+  });
+
+  // Abrir o clicado (se não estava aberto)
+  if (!wasOpen) {
+    el.classList.add('open');
+    // Scroll suave para o módulo aberto
+    setTimeout(() => {
+      el.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest'
+      });
+    }, 100);
+  }
+
+  // Haptic feedback
+  if (tg) tg.HapticFeedback?.
+    impactOccurred('light');
+}
+
+// ====== START QUIZ ======
+function startQuiz(temaId, temaNome) {
+  if (tg && tg.showConfirm) {
+    tg.showConfirm(
+      `Iniciar simulado:\n${temaNome}?`,
+      function(ok) {
+        if (ok) enviarDados(temaId);
+      }
+    );
+  } else {
+    // Fallback para navegadores normais
+    if (confirm('Iniciar simulado: '
+      + temaNome + '?')) {
+      enviarDados(temaId);
+    }
+  }
+}
+
+function enviarDados(temaId) {
+  showToast('◆ Iniciando simulado...');
+
+  const payload = JSON.stringify({
+    action: 'start_quiz',
+    tema_id: temaId
+  });
+
+  if (tg && tg.sendData) {
+    // Envia para o bot e fecha o Mini App
+    setTimeout(() => {
+      tg.sendData(payload);
+    }, 600);
+  } else {
+    console.log('sendData:', payload);
+    showToast('Tema: ' + temaId + ' (modo demo)');
+  }
+}
+
+// ====== TOAST ======
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() =>
+    t.classList.remove('show'), 2200);
+}
+
+// ====== NAV (placeholder para futuras telas) ======
+document.querySelectorAll('.nav-i')
+  .forEach(n => {
+  n.addEventListener('click', function() {
+    document.querySelectorAll('.nav-i')
+      .forEach(x => x.classList.remove('act'));
+    this.classList.add('act');
+    if (tg) tg.HapticFeedback?.
+      selectionChanged();
+  });
+});
+</script>
+</body>
+</html>
