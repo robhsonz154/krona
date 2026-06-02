@@ -7,24 +7,67 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-/* ==================== ESTILOS (MANTIDOS EXATAMENTE COMO NO SEU MODELO) ==================== */
+/* ========== SEU CSS ORIGINAL COMPLETO AQUI ========== */
+/* Mantenha todo o CSS que você já tinha no index.html anterior */
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#060A13; --bg2:#0B1120; --sf:#101B2E; --sf2:#152238; --sf3:#1A2B48;
-  --bd:#1E3050; --bd2:#264070; --gold:#D4A84B; --gold2:#E8C46E; --gold3:#C49A3C;
-  --goldG:rgba(212,168,75,.06); --goldG2:rgba(212,168,75,.12);
-  --grn:#22C55E; --grnD:#16A34A; --grnG:rgba(34,197,94,.08);
-  --red:#EF4444; --redG:rgba(239,68,68,.08); --blu:#3B82F6; --vio:#8B5CF6; --org:#F59E0B;
-  --txt:#E2E8F0; --tx2:#94A3B8; --tx3:#64748B; --tx4:#475569;
-  --r:14px; --rs:10px; --sh:0 2px 12px rgba(0,0,0,.3); --sh2:0 4px 24px rgba(0,0,0,.35);
+  --bg:#060A13;
+  --bg2:#0B1120;
+  --sf:#101B2E;
+  --sf2:#152238;
+  --sf3:#1A2B48;
+  --bd:#1E3050;
+  --bd2:#264070;
+  --gold:#D4A84B;
+  --gold2:#E8C46E;
+  --gold3:#C49A3C;
+  --goldG:rgba(212,168,75,.06);
+  --goldG2:rgba(212,168,75,.12);
+  --grn:#22C55E;
+  --grnD:#16A34A;
+  --grnG:rgba(34,197,94,.08);
+  --red:#EF4444;
+  --redG:rgba(239,68,68,.08);
+  --blu:#3B82F6;
+  --vio:#8B5CF6;
+  --org:#F59E0B;
+  --txt:#E2E8F0;
+  --tx2:#94A3B8;
+  --tx3:#64748B;
+  --tx4:#475569;
+  --r:14px;
+  --rs:10px;
+  --sh:0 2px 12px rgba(0,0,0,.3);
+  --sh2:0 4px 24px rgba(0,0,0,.35);
   --tr:.25s cubic-bezier(.4,0,.2,1)
 }
 html{background:var(--bg)}
-body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;max-width:480px;margin:0 auto;overflow-x:hidden;-webkit-font-smoothing:antialiased;padding-bottom:90px;}
-.hdr{background:linear-gradient(170deg,#0D1525 0%,var(--bg2) 100%);position:sticky;top:0;z-index:100;border-bottom:1px solid var(--bd);}
-.hdr-top{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 8px;}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--bg);color:var(--txt);
+  min-height:100vh;max-width:480px;
+  margin:0 auto;overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:90px;
+}
+.hdr{
+  background:linear-gradient(170deg,#0D1525 0%,var(--bg2) 100%);
+  position:sticky;top:0;z-index:100;
+  border-bottom:1px solid var(--bd);
+}
+.hdr-top{
+  display:flex;align-items:center;
+  justify-content:space-between;
+  padding:14px 18px 8px;
+}
 .brand{display:flex;align-items:center;gap:10px}
-.brand-mark{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(212,168,75,.25);}
+.brand-mark{
+  width:36px;height:36px;border-radius:8px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  display:flex;align-items:center;
+  justify-content:center;
+  box-shadow:0 2px 12px rgba(212,168,75,.25);
+}
 .brand-mark span{font-size:16px;font-weight:900;color:var(--bg);letter-spacing:-1px;}
 .brand-txt{display:flex;flex-direction:column}
 .brand-name{font-size:17px;font-weight:900;color:var(--gold);letter-spacing:2px;line-height:1;}
@@ -146,406 +189,618 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-16px);background:var(--sf2);border:1px solid var(--bd2);color:var(--gold);padding:10px 22px;border-radius:10px;font-size:12px;font-weight:700;opacity:0;transition:all .3s ease;z-index:200;pointer-events:none;box-shadow:var(--sh2);}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 .st,.pnl,.mod{animation:fadeUp .5s ease both;}
-.mod:nth-child(1){animation-delay:.02s}
-.mod:nth-child(2){animation-delay:.05s}
-.mod:nth-child(3){animation-delay:.08s}
-.mod:nth-child(4){animation-delay:.11s}
-.mod:nth-child(5){animation-delay:.14s}
-.mod:nth-child(6){animation-delay:.17s}
-.mod:nth-child(7){animation-delay:.20s}
-.mod:nth-child(8){animation-delay:.23s}
-.mod:nth-child(9){animation-delay:.26s}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 ::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--bd);border-radius:10px;}
-
-/* ========== ESTILOS ADICIONAIS PARA O QUIZ ========== */
-.quiz-container {
-  background: var(--sf);
-  border-radius: var(--r);
-  padding: 20px;
-  margin-bottom: 20px;
-  border: 1px solid var(--bd);
-}
-.quiz-question {
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  line-height: 1.4;
-}
-.quiz-options {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-.quiz-option {
-  background: var(--bg2);
-  border: 1px solid var(--bd);
-  border-radius: var(--rs);
-  padding: 12px 16px;
-  cursor: pointer;
-  transition: all var(--tr);
-  font-size: 14px;
-}
-.quiz-option:hover {
-  background: var(--sf2);
-  border-color: var(--gold);
-}
-.quiz-progress {
-  font-size: 12px;
-  color: var(--tx3);
-  margin-bottom: 15px;
-  text-align: center;
-}
-.quiz-close {
-  background: var(--bd);
-  border: none;
-  color: var(--txt);
-  padding: 10px 20px;
-  border-radius: var(--rs);
-  cursor: pointer;
-  margin-top: 10px;
-  font-weight: 600;
-}
-.quiz-close:hover {
-  background: var(--bd2);
-}
+.loading{text-align:center;padding:40px;color:var(--gold);font-size:14px;}
 </style>
 </head>
 <body>
 
 <div class="hdr">
   <div class="hdr-top">
-    <div class="brand"><div class="brand-mark"><span>K</span></div><div class="brand-txt"><span class="brand-name">KRONA</span><span class="brand-sub">Analytics</span></div></div>
-    <div class="usr"><div class="usr-info"><div class="usr-lbl">Aluno</div><div class="usr-nm" id="uName">Carregando...</div><div class="usr-xp-row"><span class="usr-xp" id="uXP">0 XP</span><span class="lvl-pill" id="uLvl">Lv.1</span></div></div><div class="usr-av" id="uAv">👤</div></div>
+    <div class="brand">
+      <div class="brand-mark"><span>K</span></div>
+      <div class="brand-txt">
+        <span class="brand-name">KRONA</span>
+        <span class="brand-sub">Analytics</span>
+      </div>
+    </div>
+    <div class="usr">
+      <div class="usr-info">
+        <div class="usr-lbl">Aluno</div>
+        <div class="usr-nm" id="uName">Carregando...</div>
+        <div class="usr-xp-row">
+          <span class="usr-xp" id="uXP">0 XP</span>
+          <span class="lvl-pill" id="uLvl">Lv.1</span>
+        </div>
+      </div>
+      <div class="usr-av" id="uAv">?</div>
+    </div>
   </div>
-  <div class="prog-strip"><div class="prog-row"><span class="prog-t">Progresso Geral</span><span class="prog-p" id="pPct">0%</span></div><div class="prog-track"><div class="prog-fill" id="pFill" style="width:0%"></div></div><div class="prog-info" id="pInfo">0 de 15 módulos concluídos</div></div>
+  <div class="prog-strip">
+    <div class="prog-row">
+      <span class="prog-t">Progresso Geral</span>
+      <span class="prog-p" id="pPct">0%</span>
+    </div>
+    <div class="prog-track">
+      <div class="prog-fill" id="pFill" style="width:0%"></div>
+    </div>
+    <div class="prog-info" id="pInfo">0 de 15 módulos concluídos</div>
+  </div>
 </div>
 
-<div class="ctn" id="mainContent">
-  <!-- Conteúdo principal será gerado dinamicamente pelo JS -->
+<div class="ctn">
+  <div class="stats">
+    <div class="st">
+      <div class="st-ic">✅</div>
+      <div class="st-v" id="sHits">0</div>
+      <div class="st-l">Acertos</div>
+    </div>
+    <div class="st">
+      <div class="st-ic">📝</div>
+      <div class="st-v" id="sTot">0</div>
+      <div class="st-l">Questões</div>
+    </div>
+    <div class="st">
+      <div class="st-ic">🎯</div>
+      <div class="st-v" id="sPct">0%</div>
+      <div class="st-l">Aproveit.</div>
+    </div>
+  </div>
+
+  <div class="pnl">
+    <div class="pnl-h">
+      <div class="pnl-tg">
+        <span class="pnl-ic">📊</span>
+        <span class="pnl-tt">Desempenho por Área</span>
+      </div>
+      <span class="pnl-badge bg-gold" id="nivelBadge">Iniciante</span>
+    </div>
+    <div class="pnl-b">
+      <div class="chart" id="chartContainer">
+        <div class="loading">Carregando gráficos...</div>
+      </div>
+      <div class="met-grid">
+        <div class="met">
+          <div class="met-l">Melhor Nota</div>
+          <div class="met-r">
+            <span class="met-v" id="bestGrade">0</span>
+            <span class="met-u">/10</span>
+          </div>
+          <div class="met-s pos" id="bestTema">-</div>
+        </div>
+        <div class="met">
+          <div class="met-l">Temas</div>
+          <div class="met-r">
+            <span class="met-v" id="completedThemes">0</span>
+            <span class="met-u">/15</span>
+          </div>
+          <div class="met-s pos" id="themesPercent">0%</div>
+        </div>
+        <div class="met">
+          <div class="met-l">Erros</div>
+          <div class="met-r">
+            <span class="met-v" id="errorsCount">0</span>
+            <span class="met-u">itens</span>
+          </div>
+          <div class="met-s neg" id="errorsMsg">Revisar ⚠</div>
+        </div>
+        <div class="met">
+          <div class="met-l">XP Total</div>
+          <div class="met-r">
+            <span class="met-v" id="xpTotal">0</span>
+            <span class="met-u">XP</span>
+          </div>
+          <div class="met-s neu" id="nextLevel">Próximo nível</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-h">
+    <div class="sec-l">
+      <span class="sec-tt">◆ Módulos do Simulado</span>
+    </div>
+    <span class="sec-c" id="temasCount">0/15 temas</span>
+  </div>
+
+  <div id="modulosContainer">
+    <div class="loading">Carregando módulos...</div>
+  </div>
 </div>
 
-<div class="bnav"><div class="nav-i act" id="nHome"><span class="nav-ic">🏠</span><span class="nav-lb">Início</span></div><div class="nav-i" id="nRank"><span class="nav-ic">🏆</span><span class="nav-lb">Ranking</span></div><div class="nav-i" id="nErr"><span class="nav-ic">📓</span><span class="nav-lb">Erros</span><span class="nav-dot" id="errorBadge">0</span></div><div class="nav-i" id="nProf"><span class="nav-ic">👤</span><span class="nav-lb">Perfil</span></div></div>
+<div class="bnav">
+  <div class="nav-i act" id="nHome">
+    <span class="nav-ic">🏠</span>
+    <span class="nav-lb">Início</span>
+  </div>
+  <div class="nav-i" id="nRank">
+    <span class="nav-ic">🏆</span>
+    <span class="nav-lb">Ranking</span>
+  </div>
+  <div class="nav-i" id="nErr">
+    <span class="nav-ic">📓</span>
+    <span class="nav-lb">Erros</span>
+    <span class="nav-dot" id="errorDot" style="display:none">0</span>
+  </div>
+  <div class="nav-i" id="nRefresh">
+    <span class="nav-ic">🔄</span>
+    <span class="nav-lb">Atualizar</span>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
-// ==================== BANCO DE QUESTÕES (BASEADO NO QUESTIONS_DB DO PYTHON) ====================
-// TEMA_1: 28 questões reais (enviadas pelo usuário)
-const TEMA_1_QUESTOES = [ /* 28 questões reais - vou colocar o array completo aqui, mas para não estourar o limite, coloco apenas a primeira como exemplo; no código final insiro todas */ ];
-// Infelizmente, para manter a resposta dentro do limite, usarei o banco que já foi fornecido anteriormente e convertido para JS.
-// Como o conteúdo é extenso, incluirei o banco de questões completo (já convertido) em um script separado ou aqui mesmo.
-// Vou assumir que o usuário tem o questions_bank.js e farei a integração.
-// Para este exemplo, colocarei uma estrutura de exemplo e depois o usuário pode substituir.
-const QUESTIONS_DB = {
-  "TEMA_1": [
-    { pergunta: "O agronegócio pode ser compreendido como um encadeamento de atividades econômicas. Qual alternativa indica os autores que, em 1957, cunharam pioneiramente esse conceito sob a ótica de um 'sistema integrado'?", opcoes: { A: "Thomas Malthus e David Ricardo.", B: "John Davis e Ray Goldberg.", C: "Karl Marx e Friedrich Engels.", D: "Adam Smith e David Hume.", E: "John Maynard Keynes e Milton Friedman." }, correta: "B", explicacao: "Conforme a página 29 do PDF." },
-    // ... as outras 27 questões reais (omitidas por espaço, mas no código final estarão todas)
-  ],
-  "TEMA_2": [], // Placeholder – preencha depois
-  "TEMA_3": [],
-  "TEMA_4": [],
-  "TEMA_5": [],
-  "TEMA_6": [],
-  "TEMA_7": [],
-  "TEMA_8": [],
-  "TEMA_9": [],
-  "TEMA_10": [],
-  "TEMA_11": [],
-  "TEMA_12": [],
-  "TEMA_13": [],
-  "TEMA_14": [],
-  "TEMA_15": []
-};
+// ================== CONFIGURAÇÕES ==================
+const tg = window.Telegram?.WebApp;
+let userData = null;
+let temasStats = [];
 
-// Por brevidade, não vou reescrever as 28 perguntas aqui, mas o código final as conterá integralmente.
-// O usuário pode substituir este objeto pelo questions_bank.js completo.
+// === API Base URL (substitua pela URL do seu bot quando hospedar) ===
+// Para desenvolvimento local, use ngrok: https://seu-id.ngrok.io
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:8080'
+    : 'https://seu-bot.herokuapp.com'; // ALTERE PARA SUA URL REAL
 
-// ==================== SISTEMA DE PROGRESSO (LOCALSTORAGE) ====================
-let userData = {
-  userName: "Aluno",
-  xp: 0, level: 1,
-  totalAcertos: 0, totalQuestoes: 0,
-  temasCompletos: [],
-  bestScore: 0, bestTheme: "",
-  cadernoErros: [],
-  streak: 0, lastStudyDate: null
-};
-
-function loadUserData() {
-  const stored = localStorage.getItem("krona_user");
-  if (stored) { try { Object.assign(userData, JSON.parse(stored)); } catch(e){} }
-  if (window.Telegram?.WebApp?.initDataUnsafe?.user?.first_name) userData.userName = window.Telegram.WebApp.initDataUnsafe.user.first_name;
-  saveUserData();
-}
-function saveUserData() { localStorage.setItem("krona_user", JSON.stringify(userData)); updateUI(); }
-function updateUI() {
-  document.getElementById("uName").innerText = userData.userName.slice(0,15);
-  document.getElementById("uXP").innerText = userData.xp + " XP";
-  document.getElementById("uLvl").innerText = "Lv." + userData.level;
-  const completos = userData.temasCompletos.length;
-  const pct = completos / 15 * 100;
-  document.getElementById("pPct").innerText = Math.round(pct) + "%";
-  document.getElementById("pFill").style.width = pct + "%";
-  document.getElementById("pInfo").innerHTML = `${completos} de 15 módulos concluídos`;
-  document.getElementById("sHits").innerText = userData.totalAcertos;
-  document.getElementById("sTot").innerText = userData.totalQuestoes;
-  const aproveitamento = userData.totalQuestoes ? Math.round((userData.totalAcertos / userData.totalQuestoes)*100) : 0;
-  document.getElementById("sPct").innerText = aproveitamento + "%";
-  document.getElementById("bestScore").innerText = userData.bestScore.toFixed(1);
-  document.getElementById("bestTheme").innerHTML = userData.bestTheme || "-";
-  document.getElementById("streak").innerText = userData.streak;
-  document.getElementById("errorCount").innerText = userData.cadernoErros.length;
-  document.getElementById("errorBadge").innerText = userData.cadernoErros.length || "";
-  document.getElementById("themesCount").innerHTML = `${completos}/15 temas`;
-  renderModules();
-  renderAreaChart();
+// ================== INICIALIZAÇÃO ==================
+if (tg) {
+  tg.ready();
+  tg.expand();
+  tg.setHeaderColor('#0B1120');
+  tg.setBackgroundColor('#060A13');
 }
 
-function updateStreak() {
-  const today = new Date().toDateString();
-  if (userData.lastStudyDate !== today) {
-    userData.streak = (userData.lastStudyDate === new Date(Date.now()-86400000).toDateString()) ? userData.streak+1 : 1;
-    userData.lastStudyDate = today;
-    saveUserData();
+// ================== FUNÇÕES AUXILIARES ==================
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function getUserId() {
+  if (tg && tg.initDataUnsafe?.user) {
+    return tg.initDataUnsafe.user.id;
   }
+  // Fallback para teste local
+  return localStorage.getItem('test_user_id') || 12345;
 }
 
-function addError(temaId, pergunta, correta, explicacao) {
-  userData.cadernoErros.unshift({ temaId, pergunta, correta, explicacao, data: new Date().toLocaleDateString() });
-  if (userData.cadernoErros.length > 50) userData.cadernoErros.pop();
-  saveUserData();
+function getUserName() {
+  if (tg && tg.initDataUnsafe?.user) {
+    return tg.initDataUnsafe.user.first_name || 'Aluno';
+  }
+  return 'Teste Local';
 }
 
-function recordThemeCompletion(temaId, acertos, total, nota) {
-  if (!userData.temasCompletos.includes(temaId)) userData.temasCompletos.push(temaId);
-  if (nota > userData.bestScore) { userData.bestScore = nota; userData.bestTheme = temaId; }
-  saveUserData();
-}
-
-// ==================== RENDERIZAÇÃO DOS MÓDULOS ====================
-const TEMAS_INFO = [
-  { id: "TEMA_1", nome: "Contextualização do Agronegócio", area: "agro", icone: "🌾", modulo: "A", qtd: 28 },
-  { id: "TEMA_2", nome: "Sistemas de Produção Sustentável", area: "agro", icone: "🌱", modulo: "A", qtd: 43 },
-  { id: "TEMA_3", nome: "Fundamentos de Botânica", area: "veg", icone: "🌿", modulo: "B", qtd: 20 },
-  { id: "TEMA_4", nome: "Nutrição Mineral e Fertilidade", area: "veg", icone: "🧪", modulo: "B", qtd: 18 },
-  { id: "TEMA_5", nome: "Irrigação e Drenagem", area: "agua", icone: "💧", modulo: "C", qtd: 16 },
-  { id: "TEMA_6", nome: "Principais Culturas", area: "cult", icone: "🌽", modulo: "D", qtd: 57 },
-  { id: "TEMA_7", nome: "Produção Animal no Agronegócio", area: "anim", icone: "🐄", modulo: "E", qtd: 31 },
-  { id: "TEMA_8", nome: "Anatomia e Fisiologia Animal", area: "anim", icone: "🔬", modulo: "E", qtd: 12 },
-  { id: "TEMA_9", nome: "Alimentação e Nutrição Animal", area: "anim", icone: "🍽️", modulo: "E", qtd: 24 },
-  { id: "TEMA_10", nome: "Forragicultura e Pastagens", area: "gen", icone: "🌾", modulo: "F", qtd: 25 },
-  { id: "TEMA_11", nome: "Melhoramento Genético Animal", area: "gen", icone: "🧬", modulo: "F", qtd: 30 },
-  { id: "TEMA_12", nome: "Produção de Animais Monogástricos", area: "anim", icone: "🐔", modulo: "G", qtd: 30 },
-  { id: "TEMA_13", nome: "Produção de Animais Ruminantes", area: "anim", icone: "🐮", modulo: "G", qtd: 30 },
-  { id: "TEMA_14", nome: "Agricultura de Precisão", area: "tech", icone: "📡", modulo: "H", qtd: 20 },
-  { id: "TEMA_15", nome: "Simulado Bônus", area: "bonus", icone: "🎁", modulo: "X", qtd: 16 }
-];
-
-function renderModules() {
-  const groups = {};
-  TEMAS_INFO.forEach(t => { if (!groups[t.modulo]) groups[t.modulo] = []; groups[t.modulo].push(t); });
-  let html = "";
-  const modulesOrder = ["A","B","C","D","E","F","G","H","X"];
-  for (let mod of modulesOrder) {
-    if (!groups[mod]) continue;
-    const temasMod = groups[mod];
-    const concluidos = temasMod.filter(t => userData.temasCompletos.includes(t.id)).length;
-    const totalMod = temasMod.length;
-    const openClass = mod === "A" ? "open" : "";
-    let iconClass = "agro";
-    if (mod==="B") iconClass="veg";
-    else if (mod==="C") iconClass="agua";
-    else if (mod==="D") iconClass="cult";
-    else if (mod==="E" || mod==="G") iconClass="anim";
-    else if (mod==="F") iconClass="gen";
-    else if (mod==="H") iconClass="tech";
-    else if (mod==="X") iconClass="bonus";
-    let nomeModulo = "";
-    if (mod==="A") nomeModulo = "Agronegócio & Sustentabilidade";
-    else if (mod==="B") nomeModulo = "Ciências Vegetais & Solo";
-    else if (mod==="C") nomeModulo = "Recursos Hídricos";
-    else if (mod==="D") nomeModulo = "Culturas Agrícolas";
-    else if (mod==="E") nomeModulo = "Produção Animal I";
-    else if (mod==="F") nomeModulo = "Forragem & Genética";
-    else if (mod==="G") nomeModulo = "Produção Animal II";
-    else if (mod==="H") nomeModulo = "Tecnologia & Precisão";
-    else if (mod==="X") nomeModulo = "Simulado Bônus";
-    html += `<div class="mod ${openClass}" id="mod${mod}">
-      <div class="mod-h" onclick="toggleModule('${mod}')">
-        <div class="mod-left"><div class="mod-icon ${iconClass}">${temasMod[0].icone}</div>
-        <div class="mod-det"><div class="mod-nm">${nomeModulo}</div><div class="mod-tutor"><div class="tutor-av">KR</div><span class="tutor-nm">KRONA Analytics</span></div></div></div>
-        <div class="mod-right"><div class="mod-prog"><span class="done">${concluidos}</span>/${totalMod}</div><div class="mod-chev">▸</div></div>
-      </div>
-      <div class="mod-body"><div class="mod-inner">`;
-    for (let tema of temasMod) {
-      const isDone = userData.temasCompletos.includes(tema.id);
-      const badgeClass = isDone ? "done" : "wait";
-      const badgeText = isDone ? "✅ Concluído" : "Iniciar";
-      html += `<div class="tema" onclick="startQuiz('${tema.id}','${tema.nome}')">
-        <div class="tema-ic">${tema.icone}</div>
-        <div class="tema-det"><div class="tema-tag ${tema.area}">${tema.id}</div><div class="tema-nm">${tema.nome}</div><div class="tema-ct">${tema.qtd} questões</div></div>
-        <div class="tema-st"><span class="badge-sc ${badgeClass}">${badgeText}</span></div><span class="tema-arr">›</span>
-      </div>`;
+// ================== CARREGAR DADOS DO BOT ==================
+async function carregarDadosUsuario() {
+  const userId = getUserId();
+  const userName = getUserName();
+  
+  // Atualizar nome
+  document.getElementById('uName').textContent = userName;
+  const initials = userName.substring(0, 2).toUpperCase();
+  document.getElementById('uAv').textContent = initials;
+  
+  try {
+    const response = await fetch(`${API_BASE}/api/user/${userId}`);
+    if (!response.ok) throw new Error('Erro ao carregar dados');
+    
+    userData = await response.json();
+    
+    // Atualizar UI com dados reais
+    document.getElementById('uXP').textContent = `${userData.xp} XP`;
+    document.getElementById('uLvl').textContent = `Lv.${userData.level}`;
+    document.getElementById('sHits').textContent = userData.acertos;
+    document.getElementById('sTot').textContent = userData.total_questoes;
+    document.getElementById('sPct').textContent = `${userData.percentual_geral}%`;
+    
+    const pct = userData.percentual_geral;
+    document.getElementById('pFill').style.width = `${pct}%`;
+    document.getElementById('pPct').textContent = `${pct}%`;
+    document.getElementById('pInfo').textContent = `${userData.temas_completos} de 15 módulos concluídos`;
+    document.getElementById('completedThemes').textContent = `${userData.temas_completos}/15`;
+    document.getElementById('themesPercent').textContent = `${Math.round((userData.temas_completos/15)*100)}%`;
+    document.getElementById('xpTotal').textContent = userData.xp;
+    
+    // Nível do usuário
+    const nextLevelXP = (userData.level) * 200;
+    const xpToNext = nextLevelXP - userData.xp;
+    document.getElementById('nextLevel').textContent = `${xpToNext} XP para Lv.${userData.level + 1}`;
+    
+    // Badge por nível
+    if (userData.percentual_geral >= 90) {
+      document.getElementById('nivelBadge').textContent = '🏆 Mestre';
+      document.getElementById('nivelBadge').className = 'pnl-badge bg-gold';
+    } else if (userData.percentual_geral >= 70) {
+      document.getElementById('nivelBadge').textContent = '🥇 Avançado';
+      document.getElementById('nivelBadge').className = 'pnl-badge bg-gold';
+    } else if (userData.percentual_geral >= 50) {
+      document.getElementById('nivelBadge').textContent = '📚 Em Progresso';
+      document.getElementById('nivelBadge').className = 'pnl-badge bg-grn';
+    } else {
+      document.getElementById('nivelBadge').textContent = '🌱 Iniciante';
+      document.getElementById('nivelBadge').className = 'pnl-badge bg-grn';
     }
-    html += `</div></div></div>`;
+    
+    temasStats = userData.temas_stats;
+    
+    // Melhor nota
+    let bestNota = 0;
+    let bestTemaNome = '-';
+    temasStats.forEach(t => {
+      if (t.nota && t.nota > bestNota) {
+        bestNota = t.nota;
+        bestTemaNome = t.nome;
+      }
+    });
+    document.getElementById('bestGrade').textContent = bestNota.toFixed(1);
+    document.getElementById('bestTema').textContent = bestTemaNome;
+    
+    // Carregar erros
+    await carregarErros(userId);
+    
+    // Renderizar módulos
+    renderModulos();
+    
+    // Renderizar gráfico
+    renderChart();
+    
+    return userData;
+  } catch (error) {
+    console.error('Erro ao carregar dados:', error);
+    showToast('❌ Erro ao conectar com o servidor');
+    // Dados mock para teste
+    usarDadosMock();
   }
-  document.getElementById("mainContent").innerHTML = html + `<!-- adicionar estatísticas? já existem no header -->`;
-  // Reinserir stats e painel depois? Como o conteúdo foi substituído, preciso recriar os elementos que estavam antes.
-  // Para simplificar, vou manter a estrutura original e apenas injetar os módulos.
 }
-// Corrigindo: o conteúdo principal deve incluir stats e painel também. Vou reestruturar.
-function renderFullPage() {
-  const statsHtml = `<div class="stats">...`; // Vou usar o mesmo HTML do original
-  const panelHtml = `<div class="pnl">...</div>`;
-  document.getElementById("mainContent").innerHTML = statsHtml + panelHtml + `<div class="sec-h"><div class="sec-l"><span class="sec-tt">◆ Módulos do Simulado</span></div><span class="sec-c" id="themesCount">0/15 temas</span></div><div id="modulesContainer"></div>`;
-  renderModulesIntoContainer();
+
+async function carregarErros(userId) {
+  try {
+    const response = await fetch(`${API_BASE}/api/errors/${userId}?limit=10`);
+    if (response.ok) {
+      const data = await response.json();
+      const errorCount = data.total || 0;
+      document.getElementById('errorsCount').textContent = errorCount;
+      const errorDot = document.getElementById('errorDot');
+      if (errorCount > 0) {
+        errorDot.style.display = 'flex';
+        errorDot.textContent = errorCount > 99 ? '99+' : errorCount;
+        document.getElementById('errorsMsg').textContent = `${errorCount} erros para revisar`;
+      } else {
+        errorDot.style.display = 'none';
+        document.getElementById('errorsMsg').textContent = 'Nenhum erro! 🎉';
+      }
+    }
+  } catch (error) {
+    console.error('Erro ao carregar erros:', error);
+  }
 }
-function renderModulesIntoContainer() { /* similar ao anterior */ }
 
-// ==================== LÓGICA DO QUIZ ====================
-let activeQuiz = null;
+function usarDadosMock() {
+  // Dados de exemplo para teste quando API não está disponível
+  document.getElementById('uXP').textContent = '1.250 XP';
+  document.getElementById('uLvl').textContent = 'Lv.12';
+  document.getElementById('sHits').textContent = '87';
+  document.getElementById('sTot').textContent = '116';
+  document.getElementById('sPct').textContent = '75%';
+  document.getElementById('pFill').style.width = '47%';
+  document.getElementById('pPct').textContent = '47%';
+  document.getElementById('pInfo').textContent = '7 de 15 módulos concluídos';
+  document.getElementById('completedThemes').textContent = '7/15';
+  document.getElementById('themesPercent').textContent = '47%';
+  document.getElementById('xpTotal').textContent = '1250';
+  document.getElementById('nextLevel').textContent = '150 XP para Lv.13';
+  document.getElementById('bestGrade').textContent = '9.3';
+  document.getElementById('bestTema').textContent = 'T5 — Irrigação';
+  document.getElementById('errorsCount').textContent = '29';
+  document.getElementById('errorsMsg').textContent = '29 erros para revisar';
+  
+  // Criar dados mock dos temas
+  temasStats = [];
+  const temasNomes = [
+    "🌾 Contextualização do Agronegócio", "🌱 Sistemas de Produção Sustentável",
+    "🌿 Fundamentos de Botânica", "🧪 Nutrição Mineral e Fertilidade",
+    "💧 Irrigação e Drenagem", "🌽 Principais Culturas",
+    "🐄 Produção Animal", "🔬 Anatomia e Fisiologia Animal",
+    "🍽️ Alimentação e Nutrição Animal", "🌾 Forragicultura e Pastagens",
+    "🧬 Melhoramento Genético Animal", "🐔 Produção de Monogástricos",
+    "🐮 Produção de Ruminantes", "📡 Agricultura de Precisão",
+    "🎁 Simulado Bônus"
+  ];
+  
+  for (let i = 0; i < 15; i++) {
+    temasStats.push({
+      id: `TEMA_${i+1}`,
+      nome: temasNomes[i],
+      completado: i < 7,
+      nota: i === 4 ? 9.3 : i === 3 ? 9.3 : i === 0 ? 8.7 : i === 1 ? 7.3 : i === 2 ? 6.0 : null,
+      acertos: i < 7 ? Math.floor(Math.random() * 15) + 5 : 0,
+      total: 15
+    });
+  }
+  
+  renderModulos();
+  renderChart();
+}
 
-function startQuiz(temaId, temaNome) {
-  const questoes = QUESTIONS_DB[temaId];
-  if (!questoes || questoes.length === 0) {
-    showToast(`❌ Tema ${temaNome} sem questões cadastradas.`);
+function renderModulos() {
+  if (!temasStats || temasStats.length === 0) return;
+  
+  const container = document.getElementById('modulosContainer');
+  document.getElementById('temasCount').textContent = `${temasStats.filter(t => t.completado).length}/15 temas`;
+  
+  // Agrupar temas em módulos (cada 2 temas por módulo para UI organizada)
+  const modulos = [
+    { id: 'A', nome: 'Agronegócio & Sustentabilidade', icon: '🌾', iconClass: 'agro', temas: [0, 1] },
+    { id: 'B', nome: 'Ciências Vegetais & Solo', icon: '🌿', iconClass: 'veg', temas: [2, 3] },
+    { id: 'C', nome: 'Recursos Hídricos', icon: '💧', iconClass: 'agua', temas: [4] },
+    { id: 'D', nome: 'Culturas Agrícolas', icon: '🌽', iconClass: 'cult', temas: [5] },
+    { id: 'E', nome: 'Produção Animal I', icon: '🐄', iconClass: 'anim', temas: [6, 7, 8] },
+    { id: 'F', nome: 'Forragem & Genética', icon: '🌾', iconClass: 'gen', temas: [9, 10] },
+    { id: 'G', nome: 'Produção Animal II', icon: '🐔', iconClass: 'anim', temas: [11, 12] },
+    { id: 'H', nome: 'Tecnologia & Precisão', icon: '📡', iconClass: 'tech', temas: [13] },
+    { id: 'X', nome: 'Simulado Bônus', icon: '🎁', iconClass: 'bonus', temas: [14] }
+  ];
+  
+  let html = '';
+  let modIndex = 0;
+  
+  for (const mod of modulos) {
+    const temasMod = mod.temas.map(idx => temasStats[idx]).filter(t => t);
+    const completosMod = temasMod.filter(t => t.completado).length;
+    const totalMod = temasMod.length;
+    const isOpen = modIndex === 0 ? 'open' : '';
+    
+    html += `
+      <div class="mod ${isOpen}" id="mod${mod.id}">
+        <div class="mod-h" onclick="toggleModulo('${mod.id}')">
+          <div class="mod-left">
+            <div class="mod-icon ${mod.iconClass}">${mod.icon}</div>
+            <div class="mod-det">
+              <div class="mod-nm">${mod.nome}</div>
+              <div class="mod-tutor">
+                <div class="tutor-av">KR</div>
+                <span class="tutor-nm">Equipe KRONA Analytics</span>
+              </div>
+            </div>
+          </div>
+          <div class="mod-right">
+            <div class="mod-prog"><span class="done">${completosMod}</span>/${totalMod}</div>
+            <div class="mod-chev">▸</div>
+          </div>
+        </div>
+        <div class="mod-body">
+          <div class="mod-inner">
+    `;
+    
+    for (const tema of temasMod) {
+      const temaNum = tema.id.split('_')[1];
+      const completedClass = tema.completado ? 'done' : 'wait';
+      const completedText = tema.completado ? (tema.nota ? tema.nota.toFixed(1) : 'Concluído') : 'Iniciar';
+      const tagClass = mod.iconClass === 'agro' ? 'agro' : 
+                       mod.iconClass === 'veg' ? 'veg' :
+                       mod.iconClass === 'agua' ? 'agua' :
+                       mod.iconClass === 'cult' ? 'cult' :
+                       mod.iconClass === 'anim' ? 'anim' :
+                       mod.iconClass === 'gen' ? 'gen' :
+                       mod.iconClass === 'tech' ? 'tech' : 'bonus';
+      
+      html += `
+        <div class="tema" onclick="startQuiz('${tema.id}', '${tema.nome}')">
+          <div class="tema-ic">${mod.icon}</div>
+          <div class="tema-det">
+            <div class="tema-tag ${tagClass}">Tema ${temaNum}</div>
+            <div class="tema-nm">${tema.nome}</div>
+            <div class="tema-ct">${tema.total || 15} questões</div>
+          </div>
+          <div class="tema-st">
+            <span class="badge-sc ${completedClass}">${completedText}</span>
+          </div>
+          <span class="tema-arr">›</span>
+        </div>
+      `;
+    }
+    
+    html += `
+          </div>
+        </div>
+      </div>
+    `;
+    modIndex++;
+  }
+  
+  container.innerHTML = html;
+}
+
+function renderChart() {
+  const chartContainer = document.getElementById('chartContainer');
+  if (!temasStats || temasStats.length === 0) {
+    chartContainer.innerHTML = '<div class="loading">Carregando gráficos...</div>';
     return;
   }
-  updateStreak();
-  activeQuiz = { temaId, temaNome, questoes, current: 0, acertos: 0 };
-  showQuizScreen();
-}
-
-function showQuizScreen() {
-  if (!activeQuiz) return;
-  const q = activeQuiz.questoes[activeQuiz.current];
-  const total = activeQuiz.questoes.length;
-  const progresso = `${activeQuiz.current+1} / ${total}`;
-  let optionsHtml = "";
-  for (let [letra, texto] of Object.entries(q.opcoes)) {
-    optionsHtml += `<div class="quiz-option" data-letra="${letra}">${letra}. ${texto}</div>`;
+  
+  // Pegar primeiros 6 temas para o gráfico
+  const temasParaGrafico = temasStats.slice(0, 6);
+  const cores = ['#22C55E', '#10B981', '#3B82F6', '#F59E0B', '#EF4444', '#06B6D4'];
+  
+  let html = '';
+  for (let i = 0; i < temasParaGrafico.length; i++) {
+    const tema = temasParaGrafico[i];
+    const percentual = tema.total > 0 ? Math.round((tema.acertos / tema.total) * 100) : 0;
+    const nomeAbreviado = tema.nome.substring(0, 8);
+    
+    html += `
+      <div class="cht-g">
+        <div class="cht-w">
+          <div class="cht-v">${percentual}%</div>
+          <div class="cht-b" style="height:${percentual}%; background:linear-gradient(180deg, ${cores[i]}, ${cores[i]}aa)"></div>
+        </div>
+        <span class="cht-l">${nomeAbreviado}</span>
+      </div>
+    `;
   }
-  const quizHtml = `
-    <div class="quiz-container">
-      <div class="quiz-progress">📌 ${progresso}</div>
-      <div class="quiz-question">${q.pergunta}</div>
-      <div class="quiz-options">${optionsHtml}</div>
-      <button class="quiz-close" onclick="cancelQuiz()">❌ Cancelar Simulado</button>
-    </div>
-  `;
-  document.getElementById("mainContent").innerHTML = quizHtml;
-  document.querySelectorAll(".quiz-option").forEach(opt => {
-    opt.addEventListener("click", () => handleAnswer(opt.dataset.letra));
-  });
+  
+  chartContainer.innerHTML = html;
 }
 
-function handleAnswer(letra) {
-  const q = activeQuiz.questoes[activeQuiz.current];
-  const isCorrect = (letra === q.correta);
-  if (isCorrect) {
-    activeQuiz.acertos++;
-    showToast("✅ Correta!");
+function toggleModulo(modId) {
+  const el = document.getElementById('mod' + modId);
+  const wasOpen = el.classList.contains('open');
+  
+  document.querySelectorAll('.mod').forEach(m => {
+    m.classList.remove('open');
+  });
+  
+  if (!wasOpen) {
+    el.classList.add('open');
+    setTimeout(() => {
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 100);
+  }
+  
+  if (tg) tg.HapticFeedback?.impactOccurred('light');
+}
+
+function startQuiz(temaId, temaNome) {
+  if (tg && tg.showConfirm) {
+    tg.showConfirm(`Iniciar simulado:\n${temaNome}?`, function(ok) {
+      if (ok) enviarDados(temaId);
+    });
   } else {
-    addError(activeQuiz.temaId, q.pergunta, `${q.correta}) ${q.opcoes[q.correta]}`, q.explicacao);
-    showToast(`❌ Errada! Correta: ${q.correta}) ${q.opcoes[q.correta]}`);
+    if (confirm(`Iniciar simulado: ${temaNome}?`)) {
+      enviarDados(temaId);
+    }
   }
-  activeQuiz.current++;
-  if (activeQuiz.current >= activeQuiz.questoes.length) {
-    finishQuiz();
+}
+
+function enviarDados(temaId) {
+  showToast('◆ Iniciando simulado...');
+  
+  const payload = JSON.stringify({
+    action: 'start_quiz',
+    tema_id: temaId
+  });
+  
+  if (tg && tg.sendData) {
+    setTimeout(() => {
+      tg.sendData(payload);
+      tg.close();
+    }, 600);
   } else {
-    showQuizScreen();
+    console.log('sendData:', payload);
+    showToast(`Tema: ${temaId} (demo)`);
   }
 }
 
-function finishQuiz() {
-  const acertos = activeQuiz.acertos;
-  const total = activeQuiz.questoes.length;
-  const nota = (acertos / total) * 10;
-  userData.totalAcertos += acertos;
-  userData.totalQuestoes += total;
-  if (!userData.temasCompletos.includes(activeQuiz.temaId)) {
-    userData.temasCompletos.push(activeQuiz.temaId);
+async function mostrarRanking() {
+  showToast('🏆 Carregando ranking...');
+  try {
+    const response = await fetch(`${API_BASE}/api/ranking`);
+    if (!response.ok) throw new Error('Erro ao carregar ranking');
+    const data = await response.json();
+    
+    let txt = '🏆 *RANKING DA TURMA* 🏆\n━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
+    const medals = ['🥇', '🥈', '🥉'];
+    
+    for (let i = 0; i < Math.min(data.ranking.length, 10); i++) {
+      const r = data.ranking[i];
+      const medal = medals[i] || `${i+1}.`;
+      const pct = r.total_questoes > 0 ? Math.round((r.total_acertos / r.total_questoes) * 100) : 0;
+      txt += `${medal} *${r.user_name}*\n   ${pct}% · ${r.xp} XP · Lv.${r.level}\n\n`;
+    }
+    
+    if (data.ranking.length === 0) {
+      txt += 'Sem dados ainda. Complete um tema!';
+    }
+    
+    if (tg && tg.showPopup) {
+      tg.showPopup({ title: 'Ranking', message: txt, buttons: [{ type: 'ok' }] });
+    } else {
+      alert(txt);
+    }
+  } catch (error) {
+    console.error('Erro ao carregar ranking:', error);
+    showToast('❌ Erro ao carregar ranking');
   }
-  if (nota > userData.bestScore) {
-    userData.bestScore = nota;
-    userData.bestTheme = activeQuiz.temaNome;
-  }
-  // Cálculo de XP: 15 por acerto + bônus se acertou todas
-  const xpGanho = acertos * 15 + (acertos === total ? 50 : 0);
-  userData.xp += xpGanho;
-  userData.level = Math.floor(userData.xp / 200) + 1;
-  saveUserData();
-  showToast(`🏆 Simulado finalizado! Nota: ${nota.toFixed(1)}/10`);
-  loadUserData(); // recarrega a tela principal
-  activeQuiz = null;
-  renderFullPage();
 }
 
-function cancelQuiz() {
-  if (confirm("Deseja cancelar o simulado? Seu progresso não será salvo.")) {
-    activeQuiz = null;
-    renderFullPage();
+async function mostrarErros() {
+  showToast('📓 Carregando erros...');
+  const userId = getUserId();
+  
+  try {
+    const response = await fetch(`${API_BASE}/api/errors/${userId}?limit=10`);
+    if (!response.ok) throw new Error('Erro ao carregar erros');
+    const data = await response.json();
+    
+    if (data.errors.length === 0) {
+      if (tg && tg.showPopup) {
+        tg.showPopup({ title: 'Caderno de Erros', message: '✅ Parabéns! Você não tem erros registrados!', buttons: [{ type: 'ok' }] });
+      } else {
+        alert('✅ Nenhum erro registrado!');
+      }
+      return;
+    }
+    
+    let txt = `📓 CADERNO DE ERROS (${data.total} registros)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+    for (let i = 0; i < Math.min(data.errors.length, 5); i++) {
+      const e = data.errors[i];
+      txt += `${i+1}. ${e.tema}\n❓ ${e.pergunta.substring(0, 80)}...\n✅ ${e.correta}\n\n`;
+    }
+    
+    if (tg && tg.showPopup) {
+      tg.showPopup({ title: 'Meus Erros', message: txt, buttons: [{ type: 'ok' }] });
+    } else {
+      alert(txt);
+    }
+  } catch (error) {
+    console.error('Erro ao carregar erros:', error);
+    showToast('❌ Erro ao carregar erros');
   }
 }
 
-// ==================== GRÁFICO DE ÁREA ====================
-function renderAreaChart() {
-  const areaAcertos = { agro:0, veg:0, agua:0, cult:0, anim:0, gen:0, tech:0, bonus:0 };
-  const areaTotal = { agro:0, veg:0, agua:0, cult:0, anim:0, gen:0, tech:0, bonus:0 };
-  // Para simular, poderíamos usar os temas concluídos, mas é mais preciso usar acertos por área.
-  // Como não temos acertos por área separados, usamos temas concluídos como proxy.
-  TEMAS_INFO.forEach(t => {
-    if (userData.temasCompletos.includes(t.id)) areaAcertos[t.area] += 10;
-    areaTotal[t.area] += 10;
+// ================== NAVEGAÇÃO ==================
+function initNav() {
+  document.getElementById('nHome').addEventListener('click', () => {
+    document.querySelectorAll('.nav-i').forEach(n => n.classList.remove('act'));
+    document.getElementById('nHome').classList.add('act');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (tg) tg.HapticFeedback?.selectionChanged();
   });
-  const areasOrder = ["agro","veg","agua","cult","anim","gen","tech","bonus"];
-  const labels = { agro:"Agro", veg:"Veg.", agua:"Água", cult:"Cult.", anim:"Anim.", gen:"Gen.", tech:"Tech", bonus:"Bônus" };
-  let chartHtml = "";
-  for (let i=0; i<areasOrder.length; i++) {
-    const a = areasOrder[i];
-    const perc = areaTotal[a] ? Math.round((areaAcertos[a]/areaTotal[a])*100) : 0;
-    const grad = perc>=70 ? '#22C55E' : (perc>=40 ? '#F59E0B' : '#EF4444');
-    chartHtml += `<div class="cht-g"><div class="cht-w"><div class="cht-v">${perc}%</div><div class="cht-b" style="height:${perc}%; background:linear-gradient(180deg, ${grad}, ${grad})"></div></div><span class="cht-l">${labels[a]}</span></div>`;
-  }
-  document.querySelector(".chart").innerHTML = chartHtml;
-}
-
-// ==================== BOTTOM NAV ====================
-function showRanking() {
-  // Ranking baseado em XP dos usuários (apenas local)
-  alert("🏆 Ranking local:\n" + userData.userName + " - " + userData.xp + " XP (nível " + userData.level + ")");
-}
-function showErrors() {
-  if (userData.cadernoErros.length === 0) { alert("📓 Nenhum erro registrado."); return; }
-  let txt = "📓 ÚLTIMOS ERROS:\n\n";
-  userData.cadernoErros.slice(0,5).forEach(e => {
-    txt += `${e.temaId} - ${e.pergunta.slice(0,60)}...\n✅ ${e.correta}\n\n`;
+  
+  document.getElementById('nRank').addEventListener('click', () => {
+    document.querySelectorAll('.nav-i').forEach(n => n.classList.remove('act'));
+    document.getElementById('nRank').classList.add('act');
+    mostrarRanking();
+    if (tg) tg.HapticFeedback?.selectionChanged();
   });
-  alert(txt);
-}
-function showProfile() {
-  let msg = `👤 PERFIL\nNome: ${userData.userName}\nXP: ${userData.xp}\nNível: ${userData.level}\nAcertos: ${userData.totalAcertos}/${userData.totalQuestoes}\nTemas: ${userData.temasCompletos.length}/15\nMelhor nota: ${userData.bestScore.toFixed(1)}`;
-  if (confirm(msg + "\n\nDeseja resetar todo o progresso?")) {
-    localStorage.clear();
+  
+  document.getElementById('nErr').addEventListener('click', () => {
+    document.querySelectorAll('.nav-i').forEach(n => n.classList.remove('act'));
+    document.getElementById('nErr').classList.add('act');
+    mostrarErros();
+    if (tg) tg.HapticFeedback?.selectionChanged();
+  });
+  
+  document.getElementById('nRefresh').addEventListener('click', () => {
     location.reload();
-  }
+  });
 }
 
-// ==================== INICIALIZAÇÃO ====================
-function toggleModule(mod) { /* mesmo do original */ }
-window.toggleModule = toggleModule;
-window.startQuiz = startQuiz;
-window.cancelQuiz = cancelQuiz;
+// ================== INICIALIZAÇÃO ==================
+window.addEventListener('load', () => {
+  initNav();
+  carregarDadosUsuario();
+});
 
-loadUserData();
-renderFullPage();
-document.getElementById("nHome").addEventListener("click", () => { location.reload(); });
-document.getElementById("nRank").addEventListener("click", showRanking);
-document.getElementById("nErr").addEventListener("click", showErrors);
-document.getElementById("nProf").addEventListener("click", showProfile);
+// Expor funções globalmente
+window.toggleModulo = toggleModulo;
+window.startQuiz = startQuiz;
 </script>
 </body>
 </html>
