@@ -1,541 +1,535 @@
-#!/usr/bin/env python3
-"""
-KRONA Analytics — Bot Backend para Telegram Mini App
-Versão COMPLETA com todas as funções sincronizadas
-"""
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>KRONA Analytics — Simulado Agronegócio</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ========== CSS COMPLETO ========== */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#060A13;
+  --bg2:#0B1120;
+  --sf:#101B2E;
+  --sf2:#152238;
+  --sf3:#1A2B48;
+  --bd:#1E3050;
+  --bd2:#264070;
+  --gold:#D4A84B;
+  --gold2:#E8C46E;
+  --gold3:#C49A3C;
+  --goldG:rgba(212,168,75,.06);
+  --goldG2:rgba(212,168,75,.12);
+  --grn:#22C55E;
+  --grnD:#16A34A;
+  --grnG:rgba(34,197,94,.08);
+  --red:#EF4444;
+  --redG:rgba(239,68,68,.08);
+  --blu:#3B82F6;
+  --vio:#8B5CF6;
+  --org:#F59E0B;
+  --txt:#E2E8F0;
+  --tx2:#94A3B8;
+  --tx3:#64748B;
+  --tx4:#475569;
+  --r:14px;
+  --rs:10px;
+  --sh:0 2px 12px rgba(0,0,0,.3);
+  --sh2:0 4px 24px rgba(0,0,0,.35);
+  --tr:.25s cubic-bezier(.4,0,.2,1)
+}
+html{background:var(--bg)}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--bg);color:var(--txt);
+  min-height:100vh;max-width:480px;
+  margin:0 auto;overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:90px;
+}
+.hdr{background:linear-gradient(170deg,#0D1525 0%,var(--bg2) 100%);position:sticky;top:0;z-index:100;border-bottom:1px solid var(--bd);}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 8px;}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-mark{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(212,168,75,.25);}
+.brand-mark span{font-size:16px;font-weight:900;color:var(--bg);letter-spacing:-1px;}
+.brand-txt{display:flex;flex-direction:column}
+.brand-name{font-size:17px;font-weight:900;color:var(--gold);letter-spacing:2px;line-height:1;}
+.brand-sub{font-size:8px;font-weight:600;color:var(--tx3);letter-spacing:2.5px;text-transform:uppercase;margin-top:2px;}
+.usr{display:flex;align-items:center;gap:10px}
+.usr-info{text-align:right}
+.usr-lbl{font-size:8px;color:var(--tx3);font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
+.usr-nm{font-size:12px;color:var(--txt);font-weight:700;line-height:1.2;}
+.usr-xp-row{display:flex;align-items:center;gap:5px;justify-content:flex-end;margin-top:2px;}
+.usr-xp{font-size:11px;color:var(--gold);font-weight:700;}
+.lvl-pill{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--bg);font-size:8px;font-weight:900;padding:2px 7px;border-radius:20px;letter-spacing:.3px;}
+.usr-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--sf2),var(--sf3));border:2px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--gold);}
+.prog-strip{padding:10px 18px 12px;background:rgba(0,0,0,.2);}
+.prog-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.prog-t{font-size:9px;color:var(--tx3);font-weight:600;text-transform:uppercase;letter-spacing:1.2px;}
+.prog-p{font-size:13px;color:var(--gold);font-weight:800;}
+.prog-track{background:var(--sf);border-radius:20px;height:6px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,var(--gold3),var(--gold),var(--gold2));transition:width .8s ease;}
+.prog-info{text-align:center;margin-top:4px;font-size:9px;color:var(--tx4);font-weight:500;}
+.ctn{padding:14px 14px 24px}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;}
+.st{background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);padding:14px 8px;text-align:center;position:relative;overflow:hidden;}
+.st::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.st:nth-child(1)::before{background:linear-gradient(90deg,var(--grn),#4ADE80)}
+.st:nth-child(2)::before{background:linear-gradient(90deg,var(--blu),#60A5FA)}
+.st:nth-child(3)::before{background:linear-gradient(90deg,var(--gold),var(--gold2))}
+.st-ic{font-size:18px;margin-bottom:4px}
+.st-v{font-size:22px;font-weight:900;line-height:1}
+.st:nth-child(1) .st-v{color:var(--grn)}
+.st:nth-child(2) .st-v{color:var(--blu)}
+.st:nth-child(3) .st-v{color:var(--gold)}
+.st-l{font-size:8px;color:var(--tx3);font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-top:4px;}
+.pnl{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);margin-bottom:16px;overflow:hidden;}
+.pnl-h{padding:14px 16px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bd);}
+.pnl-tg{display:flex;align-items:center;gap:8px}
+.pnl-ic{font-size:16px}
+.pnl-tt{font-size:13px;font-weight:800;color:var(--txt);letter-spacing:-.2px;}
+.pnl-badge{font-size:8px;font-weight:700;padding:3px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px;}
+.bg-gold{background:var(--goldG2);color:var(--gold)}
+.bg-grn{background:var(--grnG);color:var(--grn)}
+.pnl-b{padding:14px 16px}
+.chart{display:flex;align-items:flex-end;justify-content:center;gap:6px;height:90px;margin-bottom:14px;padding:0 6px;}
+.cht-g{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;}
+.cht-w{width:100%;height:72px;background:var(--bg2);border-radius:4px 4px 0 0;display:flex;align-items:flex-end;overflow:hidden;position:relative;}
+.cht-b{width:100%;border-radius:4px 4px 0 0;transition:height .8s cubic-bezier(.34,1.56,.64,1);}
+.cht-v{position:absolute;top:3px;left:50%;transform:translateX(-50%);font-size:8px;font-weight:800;color:var(--tx2);}
+.cht-l{font-size:7px;color:var(--tx4);font-weight:700;text-transform:uppercase;letter-spacing:.2px;}
+.met-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.met{padding:12px;border-radius:var(--rs);background:var(--bg2);border:1px solid rgba(30,48,80,.5);}
+.met-l{font-size:8px;color:var(--tx3);font-weight:700;text-transform:uppercase;letter-spacing:.6px;}
+.met-r{display:flex;align-items:baseline;gap:3px;margin-top:4px;}
+.met-v{font-size:20px;font-weight:900;color:var(--txt);}
+.met-u{font-size:10px;color:var(--tx3);font-weight:600}
+.met-s{font-size:9px;font-weight:600;margin-top:2px}
+.met-s.pos{color:var(--grn)}
+.met-s.neg{color:var(--red)}
+.met-s.neu{color:var(--tx3)}
+.sec-h{display:flex;align-items:center;justify-content:space-between;margin:20px 0 12px;padding:0 2px;}
+.sec-l{display:flex;align-items:center;gap:6px}
+.sec-tt{font-size:12px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:1px;}
+.sec-c{font-size:10px;color:var(--tx3);font-weight:600}
+.mod{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);margin-bottom:8px;overflow:hidden;transition:border-color var(--tr);}
+.mod.open{border-color:var(--bd2)}
+.mod-h{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background var(--tr);-webkit-tap-highlight-color:transparent;}
+.mod-h:active{background:rgba(255,255,255,.02)}
+.mod-left{display:flex;align-items:center;gap:12px;flex:1;min-width:0;}
+.mod-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.mod-icon.agro{background:rgba(34,197,94,.08);box-shadow:inset 0 0 0 1px rgba(34,197,94,.15);}
+.mod-icon.veg{background:rgba(16,185,129,.08);box-shadow:inset 0 0 0 1px rgba(16,185,129,.15);}
+.mod-icon.agua{background:rgba(59,130,246,.08);box-shadow:inset 0 0 0 1px rgba(59,130,246,.15);}
+.mod-icon.cult{background:rgba(245,158,11,.08);box-shadow:inset 0 0 0 1px rgba(245,158,11,.15);}
+.mod-icon.anim{background:rgba(239,68,68,.08);box-shadow:inset 0 0 0 1px rgba(239,68,68,.15);}
+.mod-icon.gen{background:rgba(139,92,246,.08);box-shadow:inset 0 0 0 1px rgba(139,92,246,.15);}
+.mod-icon.tech{background:rgba(6,182,212,.08);box-shadow:inset 0 0 0 1px rgba(6,182,212,.15);}
+.mod-icon.bonus{background:var(--goldG);box-shadow:inset 0 0 0 1px rgba(212,168,75,.15);}
+.mod-det{flex:1;min-width:0}
+.mod-nm{font-size:13px;font-weight:800;color:var(--txt);line-height:1.2;}
+.mod-tutor{display:flex;align-items:center;gap:6px;margin-top:4px;}
+.tutor-av{width:18px;height:18px;border-radius:50%;background:var(--sf3);display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:800;color:var(--tx2);}
+.tutor-nm{font-size:10px;color:var(--tx3);font-weight:600;}
+.mod-right{display:flex;align-items:center;gap:10px;}
+.mod-prog{font-size:10px;font-weight:700;color:var(--tx3);}
+.mod-prog .done{color:var(--grn)}
+.mod-chev{font-size:14px;color:var(--tx4);transition:transform .3s ease;line-height:1;}
+.mod.open .mod-chev{transform:rotate(90deg)}
+.mod-body{max-height:0;overflow:hidden;transition:max-height .4s ease;}
+.mod.open .mod-body{max-height:600px}
+.mod-inner{padding:0 12px 12px;border-top:1px solid var(--bd);}
+.tema{display:flex;align-items:center;gap:12px;padding:12px;border-radius:var(--rs);cursor:pointer;margin-top:6px;transition:background var(--tr);-webkit-tap-highlight-color:transparent;}
+.tema:active{background:rgba(255,255,255,.03)}
+.tema-ic{width:36px;height:36px;border-radius:8px;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.tema-det{flex:1;min-width:0}
+.tema-tag{font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;}
+.tema-tag.agro{color:var(--grn)}
+.tema-tag.veg{color:#10B981}
+.tema-tag.agua{color:var(--blu)}
+.tema-tag.cult{color:var(--org)}
+.tema-tag.anim{color:var(--red)}
+.tema-tag.gen{color:var(--vio)}
+.tema-tag.tech{color:#06B6D4}
+.tema-tag.bonus{color:var(--gold)}
+.tema-nm{font-size:13px;font-weight:700;color:var(--txt);line-height:1.3;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tema-ct{font-size:9px;color:var(--tx4);font-weight:500;margin-top:2px;}
+.tema-st{flex-shrink:0}
+.badge-sc{font-size:10px;font-weight:800;padding:3px 8px;border-radius:6px;}
+.badge-sc.done{background:var(--grnG);color:var(--grn)}
+.badge-sc.wait{background:rgba(100,116,139,.1);color:var(--tx3)}
+.badge-sc.lock{background:var(--goldG);color:var(--gold3)}
+.tema-arr{color:var(--tx4);font-size:14px;flex-shrink:0;transition:transform .15s ease;}
+.tema:active .tema-arr{transform:translateX(2px)}
+.bnav{position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;background:var(--bg2);border-top:1px solid var(--bd);display:flex;justify-content:space-around;padding:6px 0 max(10px,env(safe-area-inset-bottom));z-index:100;}
+.nav-i{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 14px;border-radius:10px;cursor:pointer;transition:all .15s ease;position:relative;-webkit-tap-highlight-color:transparent;}
+.nav-i.act{color:var(--gold)}
+.nav-i.act::before{content:'';position:absolute;top:-6px;width:16px;height:2px;border-radius:2px;background:var(--gold);}
+.nav-i:not(.act){color:var(--tx4)}
+.nav-ic{font-size:18px;line-height:1}
+.nav-lb{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;}
+.nav-dot{position:absolute;top:3px;right:6px;width:14px;height:14px;border-radius:50%;background:var(--red);color:#fff;font-size:7px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-16px);background:var(--sf2);border:1px solid var(--bd2);color:var(--gold);padding:10px 22px;border-radius:10px;font-size:12px;font-weight:700;opacity:0;transition:all .3s ease;z-index:200;pointer-events:none;box-shadow:var(--sh2);}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.st,.pnl,.mod{animation:fadeUp .5s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bd);border-radius:10px;}
+.loading{text-align:center;padding:40px;color:var(--gold);font-size:14px;}
+</style>
+</head>
+<body>
 
-import os
-import json
-import time
-import sqlite3
-import logging
-from datetime import datetime
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
-from telegram.ext import Application, CommandHandler, MessageHandler, CallbackQueryHandler, ContextTypes, filters
+<div class="hdr">
+  <div class="hdr-top">
+    <div class="brand">
+      <div class="brand-mark"><span>K</span></div>
+      <div class="brand-txt">
+        <span class="brand-name">KRONA</span>
+        <span class="brand-sub">Analytics</span>
+      </div>
+    </div>
+    <div class="usr">
+      <div class="usr-info">
+        <div class="usr-lbl">Aluno</div>
+        <div class="usr-nm" id="uName">Carregando...</div>
+        <div class="usr-xp-row">
+          <span class="usr-xp" id="uXP">0 XP</span>
+          <span class="lvl-pill" id="uLvl">Lv.1</span>
+        </div>
+      </div>
+      <div class="usr-av" id="uAv">?</div>
+    </div>
+  </div>
+  <div class="prog-strip">
+    <div class="prog-row">
+      <span class="prog-t">Progresso Geral</span>
+      <span class="prog-p" id="pPct">0%</span>
+    </div>
+    <div class="prog-track">
+      <div class="prog-fill" id="pFill" style="width:0%"></div>
+    </div>
+    <div class="prog-info" id="pInfo">0 de 15 módulos concluídos</div>
+  </div>
+</div>
 
-# ================== CONFIGURAÇÕES ==================
-TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
-WEBAPP_URL = os.environ.get("WEBAPP_URL", "https://robhsonz154.github.io/krona/")
-PORT = int(os.environ.get("PORT", 8080))
+<div class="ctn">
+  <div class="stats">
+    <div class="st">
+      <div class="st-ic">✅</div>
+      <div class="st-v" id="sHits">0</div>
+      <div class="st-l">Acertos</div>
+    </div>
+    <div class="st">
+      <div class="st-ic">📝</div>
+      <div class="st-v" id="sTot">0</div>
+      <div class="st-l">Questões</div>
+    </div>
+    <div class="st">
+      <div class="st-ic">🎯</div>
+      <div class="st-v" id="sPct">0%</div>
+      <div class="st-l">Aproveit.</div>
+    </div>
+  </div>
 
-# ================== LOGGING ==================
-logging.basicConfig(format="%(asctime)s [%(levelname)s] %(message)s", level=logging.INFO)
-log = logging.getLogger(__name__)
+  <div class="pnl">
+    <div class="pnl-h">
+      <div class="pnl-tg">
+        <span class="pnl-ic">📊</span>
+        <span class="pnl-tt">Desempenho por Área</span>
+      </div>
+      <span class="pnl-badge bg-gold" id="nivelBadge">Iniciante</span>
+    </div>
+    <div class="pnl-b">
+      <div class="chart" id="chartContainer">
+        <div class="loading">Carregando gráficos...</div>
+      </div>
+      <div class="met-grid">
+        <div class="met">
+          <div class="met-l">Melhor Nota</div>
+          <div class="met-r">
+            <span class="met-v" id="bestGrade">0</span>
+            <span class="met-u">/10</span>
+          </div>
+          <div class="met-s pos" id="bestTema">-</div>
+        </div>
+        <div class="met">
+          <div class="met-l">Temas</div>
+          <div class="met-r">
+            <span class="met-v" id="completedThemes">0</span>
+            <span class="met-u">/15</span>
+          </div>
+          <div class="met-s pos" id="themesPercent">0%</div>
+        </div>
+        <div class="met">
+          <div class="met-l">Erros</div>
+          <div class="met-r">
+            <span class="met-v" id="errorsCount">0</span>
+            <span class="met-u">itens</span>
+          </div>
+          <div class="met-s neg" id="errorsMsg">Revisar ⚠</div>
+        </div>
+        <div class="met">
+          <div class="met-l">XP Total</div>
+          <div class="met-r">
+            <span class="met-v" id="xpTotal">0</span>
+            <span class="met-u">XP</span>
+          </div>
+          <div class="met-s neu" id="nextLevel">Próximo nível</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-# ================== IMPORT QUESTÕES ==================
-try:
-    from questions_bank import QUESTIONS_DB
-    log.info(f"📚 Banco carregado: {sum(len(v) for v in QUESTIONS_DB.values())} questões em {len(QUESTIONS_DB)} temas")
-except ImportError:
-    log.error("❌ questions_bank.py não encontrado!")
-    QUESTIONS_DB = {}
+  <div class="sec-h">
+    <div class="sec-l">
+      <span class="sec-tt">◆ Módulos do Simulado</span>
+    </div>
+    <span class="sec-c" id="temasCount">0/15 temas</span>
+  </div>
 
-# ================== NOMES DOS TEMAS ==================
-TEMAS = {
-    "TEMA_1": "🌾 Contextualização do Agronegócio",
-    "TEMA_2": "🌱 Sistemas de Produção Sustentável",
-    "TEMA_3": "🌿 Fundamentos de Botânica",
-    "TEMA_4": "🧪 Nutrição Mineral e Fertilidade",
-    "TEMA_5": "💧 Irrigação e Drenagem",
-    "TEMA_6": "🌽 Principais Culturas",
-    "TEMA_7": "🐄 Produção Animal",
-    "TEMA_8": "🔬 Anatomia e Fisiologia Animal",
-    "TEMA_9": "🍽️ Alimentação e Nutrição Animal",
-    "TEMA_10": "🌾 Forragicultura e Pastagens",
-    "TEMA_11": "🧬 Melhoramento Genético Animal",
-    "TEMA_12": "🐔 Produção de Monogástricos",
-    "TEMA_13": "🐮 Produção de Ruminantes",
-    "TEMA_14": "📡 Agricultura de Precisão",
-    "TEMA_15": "🎁 Simulado Bônus",
+  <div id="modulosContainer">
+    <div class="loading">Carregando módulos...</div>
+  </div>
+</div>
+
+<div class="bnav">
+  <div class="nav-i act" id="nHome">
+    <span class="nav-ic">🏠</span>
+    <span class="nav-lb">Início</span>
+  </div>
+  <div class="nav-i" id="nRank">
+    <span class="nav-ic">🏆</span>
+    <span class="nav-lb">Ranking</span>
+  </div>
+  <div class="nav-i" id="nErr">
+    <span class="nav-ic">📓</span>
+    <span class="nav-lb">Erros</span>
+    <span class="nav-dot" id="errorDot" style="display:none">0</span>
+  </div>
+  <div class="nav-i" id="nRefresh">
+    <span class="nav-ic">🔄</span>
+    <span class="nav-lb">Atualizar</span>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ================== CONFIGURAÇÕES ==================
+const tg = window.Telegram?.WebApp;
+let userData = null;
+let temasStats = [];
+
+// === API Base URL ===
+const API_BASE = "https://krona-api.onrender.com";
+
+// ================== INICIALIZAÇÃO ==================
+if (tg) {
+  tg.ready();
+  tg.expand();
 }
 
-# ================== BANCO DE DADOS ==================
-DB_FILE = "krona.db"
+// ================== FUNÇÕES AUXILIARES ==================
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
 
-def get_db():
-    conn = sqlite3.connect(DB_FILE)
-    conn.row_factory = sqlite3.Row
-    return conn
+function getUserId() {
+  if (tg && tg.initDataUnsafe?.user) {
+    return tg.initDataUnsafe.user.id;
+  }
+  return localStorage.getItem('test_user_id') || 12345;
+}
 
-def init_db():
-    try:
-        conn = get_db()
-        conn.executescript("""
-        CREATE TABLE IF NOT EXISTS krona_users (
-            user_id INTEGER PRIMARY KEY,
-            user_name TEXT DEFAULT 'Aluno',
-            xp INTEGER DEFAULT 0,
-            level INTEGER DEFAULT 1,
-            total_acertos INTEGER DEFAULT 0,
-            total_questoes INTEGER DEFAULT 0,
-            temas_completos TEXT DEFAULT '',
-            lembrete INTEGER DEFAULT 0,
-            chat_id INTEGER,
-            criado_em TEXT DEFAULT (datetime('now')),
-            atualizado_em TEXT DEFAULT (datetime('now'))
-        );
-        CREATE TABLE IF NOT EXISTS krona_results (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL,
-            tema_id TEXT NOT NULL,
-            acertos INTEGER NOT NULL,
-            total INTEGER NOT NULL,
-            nota REAL NOT NULL,
-            xp_ganho INTEGER DEFAULT 0,
-            criado_em TEXT DEFAULT (datetime('now'))
-        );
-        CREATE TABLE IF NOT EXISTS krona_errors (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL,
-            tema_id TEXT NOT NULL,
-            pergunta TEXT NOT NULL,
-            correta TEXT NOT NULL,
-            criado_em TEXT DEFAULT (datetime('now'))
-        );
-        """)
-        conn.commit()
-        conn.close()
-        log.info("💾 SQLite inicializado")
-        return True
-    except Exception as e:
-        log.error(f"Erro init_db: {e}")
-        return False
+function getUserName() {
+  if (tg && tg.initDataUnsafe?.user) {
+    return tg.initDataUnsafe.user.first_name || 'Aluno';
+  }
+  return 'Teste Local';
+}
 
-def db_user(uid, name="Aluno"):
-    try:
-        conn = get_db()
-        row = conn.execute("SELECT * FROM krona_users WHERE user_id=?", (uid,)).fetchone()
-        if not row:
-            conn.execute("INSERT INTO krona_users (user_id, user_name) VALUES (?,?)", (uid, name))
-            conn.commit()
-            row = conn.execute("SELECT * FROM krona_users WHERE user_id=?", (uid,)).fetchone()
-        conn.close()
-        return dict(row)
-    except Exception as e:
-        log.error(f"Erro db_user: {e}")
-        return {
-            "user_id": uid,
-            "user_name": name,
-            "xp": 0,
-            "level": 1,
-            "total_acertos": 0,
-            "total_questoes": 0,
-            "temas_completos": "",
-            "lembrete": 0,
-            "chat_id": None
-        }
-
-def db_save_result(uid, tema, ac, tot, xp_g):
-    try:
-        conn = get_db()
-        nota = round((ac / max(tot, 1)) * 10, 1)
-        conn.execute("INSERT INTO krona_results (user_id, tema_id, acertos, total, nota, xp_ganho) VALUES (?,?,?,?,?,?)", (uid, tema, ac, tot, nota, xp_g))
-        u = conn.execute("SELECT * FROM krona_users WHERE user_id=?", (uid,)).fetchone()
-        temas = [t for t in u["temas_completos"].split(",") if t]
-        if tema not in temas:
-            temas.append(tema)
-        new_xp = u["xp"] + xp_g
-        new_lvl = new_xp // 200 + 1
-        conn.execute("UPDATE krona_users SET xp=?, level=?, total_acertos=total_acertos+?, total_questoes=total_questoes+?, temas_completos=?, atualizado_em=datetime('now') WHERE user_id=?", (new_xp, new_lvl, ac, tot, ",".join(temas), uid))
-        conn.commit()
-        conn.close()
-        return nota, new_xp, new_lvl
-    except Exception as e:
-        log.error(f"Erro db_save_result: {e}")
-        return 0, 0, 1
-
-def db_save_error(uid, tema, perg, corr):
-    try:
-        conn = get_db()
-        conn.execute("INSERT INTO krona_errors (user_id, tema_id, pergunta, correta) VALUES (?,?,?,?)", (uid, tema, perg[:200], corr))
-        conn.commit()
-        conn.close()
-    except Exception as e:
-        log.error(f"Erro db_save_error: {e}")
-
-def db_ranking(limit=15):
-    try:
-        conn = get_db()
-        rows = conn.execute("""
-            SELECT user_id, user_name, xp, level, total_acertos, total_questoes, temas_completos 
-            FROM krona_users 
-            WHERE total_questoes > 0 
-            ORDER BY xp DESC 
-            LIMIT ?
-        """, (limit,)).fetchall()
-        conn.close()
-        return [dict(r) for r in rows]
-    except Exception as e:
-        log.error(f"Erro db_ranking: {e}")
-        return []
-
-def db_errors(uid, limit=20):
-    try:
-        conn = get_db()
-        rows = conn.execute("SELECT tema_id, pergunta, correta, criado_em FROM krona_errors WHERE user_id=? ORDER BY criado_em DESC LIMIT ?", (uid, limit)).fetchall()
-        conn.close()
-        return [dict(r) for r in rows]
-    except Exception as e:
-        log.error(f"Erro db_errors: {e}")
-        return []
-
-def db_user_results(uid):
-    """Retorna todos os resultados do usuário por tema"""
-    try:
-        conn = get_db()
-        rows = conn.execute("""
-            SELECT tema_id, acertos, total, nota, criado_em 
-            FROM krona_results 
-            WHERE user_id=? 
-            ORDER BY criado_em DESC
-        """, (uid,)).fetchall()
-        conn.close()
-        return [dict(r) for r in rows]
-    except Exception as e:
-        log.error(f"Erro db_user_results: {e}")
-        return []
-
-def db_user_stats_by_tema(uid):
-    """Retorna estatísticas por tema para o gráfico"""
-    try:
-        conn = get_db()
-        rows = conn.execute("""
-            SELECT tema_id, 
-                   SUM(acertos) as total_acertos, 
-                   SUM(total) as total_questoes,
-                   AVG(nota) as media_nota
-            FROM krona_results 
-            WHERE user_id=? 
-            GROUP BY tema_id
-        """, (uid,)).fetchall()
-        conn.close()
-        return [dict(r) for r in rows]
-    except Exception as e:
-        log.error(f"Erro db_user_stats_by_tema: {e}")
-        return []
-
-# ================== FUNÇÕES AUXILIARES ==================
-def barra(atual, total):
-    n = int((atual / max(total, 1)) * 10)
-    return "▓" * n + "░" * (10 - n)
-
-def calc_xp(acertos, total):
-    return acertos * 15 + (50 if acertos == total else 0)
-
-# ================== SESSÕES ==================
-sessions = {}
-
-# ================== HANDLERS ==================
-async def cmd_start(update: Update, ctx):
-    u = update.effective_user
-    db_user(u.id, u.first_name or "Aluno")
-    kb = InlineKeyboardMarkup([
-        [InlineKeyboardButton("◆ Abrir KRONA Analytics", web_app=WebAppInfo(url=WEBAPP_URL))],
-        [InlineKeyboardButton("🏆 Ranking", callback_data="cb_ranking"), 
-         InlineKeyboardButton("📊 Progresso", callback_data="cb_progresso")],
-        [InlineKeyboardButton("📓 Meus Erros", callback_data="cb_erros"), 
-         InlineKeyboardButton("🔔 Lembrete", callback_data="cb_lembrete")]
-    ])
-    await update.message.reply_text(
-        f"◆ *KRONA Analytics*\n━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-        f"Olá, *{u.first_name}*! 👋\n\n"
-        f"Plataforma de simulados preparatórios para Técnico em Agronegócio — SENAR\n\n"
-        f"📚 15 temas · 230+ questões\n"
-        f"🎯 Estilo ENEM · Timer 5 min\n"
-        f"🏆 Ranking · XP · Níveis\n\n"
-        f"━━━━━━━━━━━━━━━━━━━━━━━━\n"
-        f"Toque no botão abaixo para começar:",
-        reply_markup=kb,
-        parse_mode="Markdown"
-    )
-
-async def handle_webapp(update: Update, ctx):
-    data = update.effective_message.web_app_data.data
-    uid = update.effective_user.id
-    try:
-        payload = json.loads(data)
-        if payload.get("action") == "start_quiz" and payload.get("tema_id"):
-            await iniciar_quiz(update, ctx, payload["tema_id"])
-    except:
-        pass
-
-async def iniciar_quiz(update, ctx, tema_id):
-    uid = update.effective_user.id
-    if tema_id not in QUESTIONS_DB:
-        await update.effective_message.reply_text(f"❌ Tema não encontrado.")
-        return
-    sessions[uid] = {
-        "tema": tema_id,
-        "idx": 0,
-        "score": 0,
-        "total": len(QUESTIONS_DB[tema_id]),
-        "questoes": QUESTIONS_DB[tema_id].copy(),
-        "timer": time.time()
+// ================== CARREGAR DADOS DO USUÁRIO ==================
+async function carregarDadosUsuario() {
+  const userId = getUserId();
+  const userName = getUserName();
+  
+  document.getElementById('uName').textContent = userName;
+  const initials = userName.substring(0, 2).toUpperCase();
+  document.getElementById('uAv').textContent = initials;
+  
+  try {
+    const response = await fetch(`${API_BASE}/api/user/${userId}`);
+    if (!response.ok) throw new Error('Erro ao carregar dados');
+    
+    userData = await response.json();
+    
+    document.getElementById('uXP').textContent = `${userData.xp || 0} XP`;
+    document.getElementById('uLvl').textContent = `Lv.${userData.level || 1}`;
+    document.getElementById('sHits').textContent = userData.acertos || 0;
+    document.getElementById('sTot').textContent = userData.total_questoes || 0;
+    document.getElementById('sPct').textContent = `${userData.percentual_geral || 0}%`;
+    
+    const pct = userData.percentual_geral || 0;
+    document.getElementById('pFill').style.width = `${pct}%`;
+    document.getElementById('pPct').textContent = `${pct}%`;
+    document.getElementById('pInfo').textContent = `${userData.temas_completos || 0} de 15 módulos concluídos`;
+    document.getElementById('completedThemes').textContent = `${userData.temas_completos || 0}/15`;
+    document.getElementById('themesPercent').textContent = `${Math.round(((userData.temas_completos || 0)/15)*100)}%`;
+    document.getElementById('xpTotal').textContent = userData.xp || 0;
+    
+    const currentLevel = userData.level || 1;
+    const nextLevelXP = currentLevel * 200;
+    const xpToNext = nextLevelXP - (userData.xp || 0);
+    document.getElementById('nextLevel').textContent = `${xpToNext > 0 ? xpToNext : 0} XP para Lv.${currentLevel + 1}`;
+    
+    const nivelBadge = document.getElementById('nivelBadge');
+    if (userData.percentual_geral >= 90) {
+      nivelBadge.textContent = '🏆 Mestre';
+    } else if (userData.percentual_geral >= 70) {
+      nivelBadge.textContent = '🥇 Avançado';
+    } else if (userData.percentual_geral >= 50) {
+      nivelBadge.textContent = '📚 Em Progresso';
+    } else {
+      nivelBadge.textContent = '🌱 Iniciante';
     }
-    await enviar_questao(update.effective_message, uid, tema_id, 0)
-
-async def enviar_questao(msg, uid, tema_id, idx):
-    s = sessions.get(uid)
-    if not s or idx >= len(s["questoes"]):
-        await finalizar(msg, uid, tema_id)
-        return
-    q = s["questoes"][idx]
-    texto = f"◆ *Questão {idx+1}/{s['total']}*\n\n{q['pergunta']}\n\n"
-    for letra, opcao in q["opcoes"].items():
-        texto += f"\n*{letra}.* {opcao}"
-    texto += f"\n\n━━━━━━━━━━━━━━━━━━━━━━━━\n⏱️ *5 minutos para responder*"
-    kb = InlineKeyboardMarkup([
-        [InlineKeyboardButton(l, callback_data=f"R_{tema_id}_{idx}_{l}") for l in ["A","B","C","D","E"]],
-        [InlineKeyboardButton("❌ Cancelar", callback_data="cb_cancelar")]
-    ])
-    await msg.reply_text(texto, reply_markup=kb, parse_mode="Markdown")
-
-async def handle_cb(update: Update, ctx):
-    q = update.callback_query
-    await q.answer()
-    uid = q.from_user.id
-    data = q.data
     
-    if data.startswith("R_"):
-        parts = data.split("_")
-        tema = f"{parts[1]}_{parts[2]}"
-        idx = int(parts[3])
-        resp = parts[4]
-        s = sessions.get(uid)
-        if s and idx < len(s["questoes"]):
-            q_atual = s["questoes"][idx]
-            if resp == q_atual["correta"]:
-                s["score"] += 1
-                txt = f"✅ *ACERTOU!* 🎉\n\n💡 *Explicação:*\n{q_atual['explicacao']}\n\n━━━━━━━━━━━━━━━━━━━━━\n📊 Placar: *{s['score']}/{idx+1}*"
-            else:
-                db_save_error(uid, tema, q_atual["pergunta"], f"{q_atual['correta']}) {q_atual['opcoes'][q_atual['correta']]}")
-                txt = f"❌ *ERROU!*\n\n✅ *Correta:* {q_atual['correta']}) {q_atual['opcoes'][q_atual['correta']]}\n\n💡 *Explicação:*\n{q_atual['explicacao']}\n\n━━━━━━━━━━━━━━━━━━━━━\n📓 _Salvo no caderno de erros_"
-            s["idx"] = idx + 1
-            if idx + 1 >= s["total"]:
-                kb = InlineKeyboardMarkup([[InlineKeyboardButton("📊 VER RESULTADO", callback_data=f"N_{tema}_{idx+1}")]])
-            else:
-                kb = InlineKeyboardMarkup([[InlineKeyboardButton("➡️ PRÓXIMA", callback_data=f"N_{tema}_{idx+1}")]])
-            await q.edit_message_text(txt, reply_markup=kb, parse_mode="Markdown")
-            
-    elif data.startswith("N_"):
-        parts = data.split("_")
-        tema = f"{parts[1]}_{parts[2]}"
-        idx = int(parts[3])
-        await enviar_questao(q.message, uid, tema, idx)
-        
-    elif data == "cb_cancelar":
-        if uid in sessions:
-            del sessions[uid]
-        await q.edit_message_text("❌ Simulado cancelado.\n/start")
-        
-    elif data == "cb_ranking":
-        ranking = db_ranking(10)
-        if not ranking:
-            txt = "🏆 *RANKING*\n\nSem dados ainda. Complete um tema para aparecer no ranking!"
-        else:
-            medals = ["🥇", "🥈", "🥉"]
-            txt = "🏆 *RANKING DA TURMA* 🏆\n━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-            for i, r in enumerate(ranking[:10]):
-                medal = medals[i] if i < 3 else f"{i+1}."
-                pct = round(r["total_acertos"] / max(r["total_questoes"], 1) * 100)
-                temas_feitos = len([t for t in r["temas_completos"].split(",") if t])
-                txt += f"{medal} *{r['user_name']}*\n   📊 {pct}% acertos · {r['xp']} XP · Lv.{r['level']} · {temas_feitos}/15 temas\n\n"
-        await q.edit_message_text(txt, parse_mode="Markdown")
-        
-    elif data == "cb_progresso":
-        u = db_user(uid)
-        temas_feitos = len([t for t in u["temas_completos"].split(",") if t])
-        pct = round(u["total_acertos"] / max(u["total_questoes"], 1) * 100)
-        txt = f"📊 *SEU PROGRESSO*\n━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-        txt += f"👤 *{u['user_name']}*\n"
-        txt += f"🎖️ Level: *{u['level']}*\n"
-        txt += f"⭐ XP: *{u['xp']}*\n"
-        txt += f"✅ Acertos: *{u['total_acertos']}/{u['total_questoes']}* ({pct}%)\n"
-        txt += f"📚 Temas concluídos: *{temas_feitos}/15*\n"
-        txt += f"🏆 Próximo nível: *{200 - (u['xp'] % 200)} XP*"
-        await q.edit_message_text(txt, parse_mode="Markdown")
-        
-    elif data == "cb_erros":
-        erros = db_errors(uid, 10)
-        if not erros:
-            txt = "📓 *CADERNO DE ERROS*\n\n✅ Parabéns! Você não tem erros registrados!\n\n_Continue assim!_"
-        else:
-            txt = f"📓 *CADERNO DE ERROS* ({len(erros)} registros)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-            for i, e in enumerate(erros[:10], 1):
-                tema_nome = TEMAS.get(e["tema_id"], e["tema_id"])
-                txt += f"*{i}. {tema_nome}*\n"
-                txt += f"❓ {e['pergunta'][:80]}...\n"
-                txt += f"✅ {e['correta']}\n\n"
-        await q.edit_message_text(txt, parse_mode="Markdown")
-        
-    elif data == "cb_lembrete":
-        conn = get_db()
-        r = conn.execute("SELECT lembrete FROM krona_users WHERE user_id=?", (uid,)).fetchone()
-        novo = 0 if (r and r["lembrete"]) else 1
-        conn.execute("UPDATE krona_users SET lembrete=?, chat_id=? WHERE user_id=?", (novo, q.message.chat_id, uid))
-        conn.commit()
-        conn.close()
-        st = "ativado 🔔" if novo else "desativado 🔕"
-        await q.edit_message_text(
-            f"◆ Lembrete *{st}*!\n\n" + 
-            ("Você receberá notificações diárias às 19h." if novo else "Notificações desativadas."),
-            parse_mode="Markdown"
-        )
-
-async def finalizar(msg, uid, tema_id):
-    s = sessions.get(uid)
-    if not s:
-        return
-    ac, tot = s["score"], s["total"]
-    xp_g = calc_xp(ac, tot)
-    nota, new_xp, new_lvl = db_save_result(uid, tema_id, ac, tot, xp_g)
+    await carregarErros(userId);
+    await carregarTemasStats(userId);
+    renderModulos();
+    renderChart();
     
-    # Feedback por nota
-    if nota >= 9:
-        emoji, frase = "🏆", "EXCELENTE! Domínio total do tema!"
-    elif nota >= 7:
-        emoji, frase = "🥇", "MUITO BOM! Continue assim!"
-    elif nota >= 5:
-        emoji, frase = "📚", "BOM! Revise os pontos que errou."
-    else:
-        emoji, frase = "📖", "REVEJA O CONTEÚDO antes de continuar."
+  } catch (error) {
+    console.error('Erro ao carregar dados:', error);
+    showToast('❌ Erro ao conectar com o servidor');
+    usarDadosMock();
+  }
+}
+
+async function carregarErros(userId) {
+  try {
+    const response = await fetch(`${API_BASE}/api/errors/${userId}?limit=10`);
+    if (response.ok) {
+      const data = await response.json();
+      const errorCount = data.errors?.length || 0;
+      document.getElementById('errorsCount').textContent = errorCount;
+      const errorDot = document.getElementById('errorDot');
+      if (errorCount > 0) {
+        errorDot.style.display = 'flex';
+        errorDot.textContent = errorCount > 99 ? '99+' : errorCount;
+        document.getElementById('errorsMsg').textContent = `${errorCount} erros para revisar`;
+      } else {
+        errorDot.style.display = 'none';
+        document.getElementById('errorsMsg').textContent = 'Nenhum erro! 🎉';
+      }
+    }
+  } catch (error) {
+    console.error('Erro ao carregar erros:', error);
+  }
+}
+
+async function carregarTemasStats(userId) {
+  try {
+    const response = await fetch(`${API_BASE}/api/user/${userId}`);
+    if (response.ok) {
+      const data = await response.json();
+      if (data.temas_stats && data.temas_stats.length > 0) {
+        temasStats = data.temas_stats;
+      } else {
+        criarTemasStatsMock();
+      }
+    } else {
+      criarTemasStatsMock();
+    }
+  } catch (error) {
+    console.error('Erro ao carregar temas:', error);
+    criarTemasStatsMock();
+  }
+}
+
+function criarTemasStatsMock() {
+  const temasList = [
+    "🌾 Contextualização do Agronegócio", "🌱 Sistemas de Produção Sustentável",
+    "🌿 Fundamentos de Botânica", "🧪 Nutrição Mineral e Fertilidade",
+    "💧 Irrigação e Drenagem", "🌽 Principais Culturas",
+    "🐄 Produção Animal", "🔬 Anatomia e Fisiologia Animal",
+    "🍽️ Alimentação e Nutrição Animal", "🌾 Forragicultura e Pastagens",
+    "🧬 Melhoramento Genético Animal", "🐔 Produção de Monogástricos",
+    "🐮 Produção de Ruminantes", "📡 Agricultura de Precisão",
+    "🎁 Simulado Bônus"
+  ];
+  temasStats = [];
+  for (let i = 0; i < temasList.length; i++) {
+    temasStats.push({
+      id: `TEMA_${i+1}`,
+      nome: temasList[i],
+      completado: false,
+      nota: null,
+      acertos: 0,
+      total: 15
+    });
+  }
+}
+
+function usarDadosMock() {
+  document.getElementById('uXP').textContent = '0 XP';
+  document.getElementById('uLvl').textContent = 'Lv.1';
+  document.getElementById('sHits').textContent = '0';
+  document.getElementById('sTot').textContent = '0';
+  document.getElementById('sPct').textContent = '0%';
+  document.getElementById('pFill').style.width = '0%';
+  document.getElementById('pPct').textContent = '0%';
+  document.getElementById('pInfo').textContent = '0 de 15 módulos concluídos';
+  document.getElementById('completedThemes').textContent = '0/15';
+  document.getElementById('themesPercent').textContent = '0%';
+  document.getElementById('xpTotal').textContent = '0';
+  document.getElementById('nextLevel').textContent = '200 XP para Lv.2';
+  document.getElementById('bestGrade').textContent = '0';
+  document.getElementById('bestTema').textContent = '-';
+  document.getElementById('errorsCount').textContent = '0';
+  document.getElementById('errorsMsg').textContent = 'Nenhum erro! 🎉';
+  criarTemasStatsMock();
+  renderModulos();
+  renderChart();
+}
+
+function renderModulos() {
+  if (!temasStats || temasStats.length === 0) return;
+  
+  const container = document.getElementById('modulosContainer');
+  if (!container) return;
+  
+  document.getElementById('temasCount').textContent = `${temasStats.filter(t => t.completado).length}/15 temas`;
+  
+  const modulos = [
+    { id: 'A', nome: 'Agronegócio & Sustentabilidade', icon: '🌾', iconClass: 'agro', temas: [0, 1] },
+    { id: 'B', nome: 'Ciências Vegetais & Solo', icon: '🌿', iconClass: 'veg', temas: [2, 3] },
+    { id: 'C', nome: 'Recursos Hídricos', icon: '💧', iconClass: 'agua', temas: [4] },
+    { id: 'D', nome: 'Culturas Agrícolas', icon: '🌽', iconClass: 'cult', temas: [5] },
+    { id: 'E', nome: 'Produção Animal I', icon: '🐄', iconClass: 'anim', temas: [6, 7, 8] },
+    { id: 'F', nome: 'Forragem & Genética', icon: '🌾', iconClass: 'gen', temas: [9, 10] },
+    { id: 'G', nome: 'Produção Animal II', icon: '🐔', iconClass: 'anim', temas: [11, 12] },
+    { id: 'H', nome: 'Tecnologia & Precisão', icon: '📡', iconClass: 'tech', temas: [13] },
+    { id: 'X', nome: 'Simulado Bônus', icon: '🎁', iconClass: 'bonus', temas: [14] }
+  ];
+  
+  let html = '';
+  let modIndex = 0;
+  
+  for (const mod of modulos) {
+    const temasMod = mod.temas.map(idx => temasStats[idx]).filter(t => t);
+    const completosMod = temasMod.filter(t => t && t.completado).length;
+    const totalMod = temasMod.length;
+    const isOpen = modIndex === 0 ? 'open' : '';
     
-    txt = f"{emoji} *RESULTADO FINAL* {emoji}\n━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-    txt += f"📚 *{TEMAS.get(tema_id, tema_id)}*\n\n"
-    txt += f"✅ *Acertos:* {ac}/{tot}\n"
-    txt += f"📈 *Nota:* {nota:.1f}/10\n"
-    txt += f"⭐ *XP ganho:* +{xp_g}\n"
-    txt += f"🎖️ *XP total:* {new_xp} (Lv.{new_lvl})\n\n"
-    txt += f"💬 *{frase}*"
-    
-    kb = InlineKeyboardMarkup([
-        [InlineKeyboardButton("◆ Abrir KRONA", web_app=WebAppInfo(url=WEBAPP_URL))],
-        [InlineKeyboardButton("🏆 Ranking", callback_data="cb_ranking"), 
-         InlineKeyboardButton("📓 Erros", callback_data="cb_erros")]
-    ])
-    
-    await msg.reply_text(txt, reply_markup=kb, parse_mode="Markdown")
-    del sessions[uid]
-
-# ================== API FLASK ==================
-app = Flask(__name__)
-CORS(app)
-
-@app.route('/health', methods=['GET'])
-def health():
-    return "OK", 200
-
-@app.route('/init-db', methods=['GET'])
-def init_db_route():
-    try:
-        if init_db():
-            return "Database initialized successfully!", 200
-        return "Database initialization failed.", 500
-    except Exception as e:
-        return f"Error: {e}", 500
-
-@app.route('/api/user/<int:user_id>', methods=['GET'])
-def api_user(user_id):
-    try:
-        user = db_user(user_id)
-        temas_completos = len([t for t in user["temas_completos"].split(",") if t]) if user["temas_completos"] else 0
-        stats_by_tema = db_user_stats_by_tema(user_id)
-        
-        # Preparar dados por tema para o gráfico
-        temas_stats = []
-        for tema_id, tema_nome in TEMAS.items():
-            tema_data = next((s for s in stats_by_tema if s["tema_id"] == tema_id), None)
-            temas_stats.append({
-                "id": tema_id,
-                "nome": tema_nome,
-                "completado": tema_id in user["temas_completos"].split(",") if user["temas_completos"] else False,
-                "acertos": tema_data["total_acertos"] if tema_data else 0,
-                "total": tema_data["total_questoes"] if tema_data else 0,
-                "nota": round(tema_data["media_nota"], 1) if tema_data else None
-            })
-        
-        return jsonify({
-            "user_id": user["user_id"],
-            "nome": user["user_name"],
-            "xp": user["xp"],
-            "level": user["level"],
-            "acertos": user["total_acertos"],
-            "total_questoes": user["total_questoes"],
-            "temas_completos": temas_completos,
-            "percentual_geral": round((user["total_acertos"] / max(user["total_questoes"], 1)) * 100, 1),
-            "temas_stats": temas_stats
-        })
-    except Exception as e:
-        log.error(f"Erro /api/user: {e}")
-        return jsonify({"error": str(e)}), 500
-
-@app.route('/api/ranking', methods=['GET'])
-def api_ranking():
-    try:
-        ranking_data = db_ranking(15)
-        return jsonify({"ranking": ranking_data})
-    except Exception as e:
-        log.error(f"Erro /api/ranking: {e}")
-        return jsonify({"ranking": []}), 200
-
-@app.route('/api/errors/<int:user_id>', methods=['GET'])
-def api_errors(user_id):
-    try:
-        errors_data = db_errors(user_id, 20)
-        # Formatar com nome do tema
-        for e in errors_data:
-            e["tema_nome"] = TEMAS.get(e["tema_id"], e["tema_id"])
-        return jsonify({"errors": errors_data, "total": len(errors_data)})
-    except Exception as e:
-        log.error(f"Erro /api/errors: {e}")
-        return jsonify({"errors": [], "total": 0}), 200
-
-@app.route('/api/progress/<int:user_id>', methods=['GET'])
-def api_progress(user_id):
-    try:
-        results = db_user_results(user_id)
-        return jsonify({"results": results})
-    except Exception as e:
-        log.error(f"Erro /api/progress: {e}")
-        return jsonify({"results": []}), 200
-
-@app.route('/db-test', methods=['GET'])
-def db_test():
-    try:
-        conn = get_db()
-        conn.execute("SELECT 1 FROM krona_users LIMIT 1")
-        conn.close()
-        return "Database connection successful!", 200
-    except Exception as e:
-        return f"Database connection failed: {e}", 500
-
-# ================== MAIN ==================
-def main():
-    init_db()
-    
-    from threading import Thread
-    def run_flask():
-        app.run(host='0.0.0.0', port=PORT)
-    Thread(target=run_flask, daemon=True).start()
-    
-    if not TOKEN:
-        log.error("❌ TOKEN não configurado!")
-        return
-    
-    application = Application.builder().token(TOKEN).build()
-    application.add_handler(CommandHandler("start", cmd_start))
-    application.add_handler(MessageHandler(filters.StatusUpdate.WEB_APP_DATA, handle_webapp))
-    application.add_handler(CallbackQueryHandler(handle_cb))
-    
-    log.info("=" * 42)
-    log.info("◆ KRONA Analytics — COMPLETO E SINCRONIZADO")
-    log.info(f"🌐 WebApp: {WEBAPP_URL}")
-    log.info(f"🔌 API Porta: {PORT}")
-    log.info("=" * 42)
-    
-    application.run_polling(allowed_updates=Update.ALL_TYPES)
-
-if __name__ == "__main__":
-    main()
+    html += `
+      <div class="mod ${isOpen}" id="mod${mod.id}">
+        <div class="mod-h" onclick="toggleModulo('${mod.id}')">
+          <div class="mod-left">
+            <div class="mod
