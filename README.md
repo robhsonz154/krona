@@ -532,4 +532,241 @@ function renderModulos() {
       <div class="mod ${isOpen}" id="mod${mod.id}">
         <div class="mod-h" onclick="toggleModulo('${mod.id}')">
           <div class="mod-left">
-            <div class="mod
+            <div class="mod-icon ${mod.iconClass}">${mod.icon}</div>
+            <div class="mod-det">
+              <div class="mod-nm">${mod.nome}</div>
+              <div class="mod-tutor">
+                <div class="tutor-av">KR</div>
+                <span class="tutor-nm">Equipe KRONA Analytics</span>
+              </div>
+            </div>
+          </div>
+          <div class="mod-right">
+            <div class="mod-prog"><span class="done">${completosMod}</span>/${totalMod}</div>
+            <div class="mod-chev">▸</div>
+          </div>
+        </div>
+        <div class="mod-body">
+          <div class="mod-inner">
+    `;
+    
+    for (const tema of temasMod) {
+      if (!tema) continue;
+      const temaNum = tema.id.split('_')[1];
+      const completedClass = tema.completado ? 'done' : 'wait';
+      const completedText = tema.completado ? (tema.nota ? tema.nota.toFixed(1) : 'Concluído') : 'Iniciar';
+      const tagClass = mod.iconClass;
+      
+      html += `
+        <div class="tema" onclick="startQuiz('${tema.id}', '${tema.nome}')">
+          <div class="tema-ic">${mod.icon}</div>
+          <div class="tema-det">
+            <div class="tema-tag ${tagClass}">Tema ${temaNum}</div>
+            <div class="tema-nm">${tema.nome}</div>
+            <div class="tema-ct">${tema.total || 15} questões</div>
+          </div>
+          <div class="tema-st">
+            <span class="badge-sc ${completedClass}">${completedText}</span>
+          </div>
+          <span class="tema-arr">›</span>
+        </div>
+      `;
+    }
+    
+    html += `
+          </div>
+        </div>
+      </div>
+    `;
+    modIndex++;
+  }
+  
+  container.innerHTML = html;
+}
+
+function renderChart() {
+  const chartContainer = document.getElementById('chartContainer');
+  if (!chartContainer) return;
+  
+  if (!temasStats || temasStats.length === 0) {
+    chartContainer.innerHTML = '<div class="loading">Carregando gráficos...</div>';
+    return;
+  }
+  
+  const temasParaGrafico = temasStats.slice(0, 6);
+  const cores = ['#22C55E', '#10B981', '#3B82F6', '#F59E0B', '#EF4444', '#06B6D4'];
+  
+  let html = '';
+  for (let i = 0; i < temasParaGrafico.length; i++) {
+    const tema = temasParaGrafico[i];
+    const percentual = tema.total > 0 ? Math.round((tema.acertos / tema.total) * 100) : 0;
+    const nomeAbreviado = tema.nome.substring(0, 8);
+    
+    html += `
+      <div class="cht-g">
+        <div class="cht-w">
+          <div class="cht-v">${percentual}%</div>
+          <div class="cht-b" style="height:${percentual}%; background:linear-gradient(180deg, ${cores[i]}, ${cores[i]}aa)"></div>
+        </div>
+        <span class="cht-l">${nomeAbreviado}</span>
+      </div>
+    `;
+  }
+  
+  chartContainer.innerHTML = html;
+}
+
+function toggleModulo(modId) {
+  const el = document.getElementById('mod' + modId);
+  if (!el) return;
+  const wasOpen = el.classList.contains('open');
+  
+  document.querySelectorAll('.mod').forEach(m => {
+    m.classList.remove('open');
+  });
+  
+  if (!wasOpen) {
+    el.classList.add('open');
+    setTimeout(() => {
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 100);
+  }
+  
+  if (tg) tg.HapticFeedback?.impactOccurred('light');
+}
+
+function startQuiz(temaId, temaNome) {
+  if (tg && tg.showConfirm) {
+    tg.showConfirm(`Iniciar simulado:\n${temaNome}?`, function(ok) {
+      if (ok) enviarDados(temaId);
+    });
+  } else {
+    if (confirm(`Iniciar simulado: ${temaNome}?`)) {
+      enviarDados(temaId);
+    }
+  }
+}
+
+function enviarDados(temaId) {
+  showToast('◆ Iniciando simulado...');
+  
+  const payload = JSON.stringify({
+    action: 'start_quiz',
+    tema_id: temaId
+  });
+  
+  if (tg && tg.sendData) {
+    setTimeout(() => {
+      tg.sendData(payload);
+      tg.close();
+    }, 600);
+  } else {
+    console.log('sendData:', payload);
+    showToast(`Tema: ${temaId} (demo)`);
+  }
+}
+
+async function mostrarRanking() {
+  showToast('🏆 Carregando ranking...');
+  try {
+    const response = await fetch(`${API_BASE}/api/ranking`);
+    if (!response.ok) throw new Error('Erro ao carregar ranking');
+    const data = await response.json();
+    
+    let txt = '🏆 RANKING DA TURMA 🏆\n━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
+    const medals = ['🥇', '🥈', '🥉'];
+    
+    if (!data.ranking || data.ranking.length === 0) {
+      txt += 'Sem dados ainda. Complete um tema!';
+    } else {
+      for (let i = 0; i < Math.min(data.ranking.length, 10); i++) {
+        const r = data.ranking[i];
+        const medal = medals[i] || `${i+1}.`;
+        const pct = r.total_questoes > 0 ? Math.round((r.total_acertos / r.total_questoes) * 100) : 0;
+        txt += `${medal} ${r.user_name}\n   ${pct}% · ${r.xp} XP · Lv.${r.level}\n\n`;
+      }
+    }
+    
+    if (tg && tg.showPopup) {
+      tg.showPopup({ title: 'Ranking', message: txt, buttons: [{ type: 'ok' }] });
+    } else {
+      alert(txt);
+    }
+  } catch (error) {
+    console.error('Erro ao carregar ranking:', error);
+    showToast('❌ Erro ao carregar ranking');
+  }
+}
+
+async function mostrarErros() {
+  showToast('📓 Carregando erros...');
+  const userId = getUserId();
+  
+  try {
+    const response = await fetch(`${API_BASE}/api/errors/${userId}?limit=10`);
+    if (!response.ok) throw new Error('Erro ao carregar erros');
+    const data = await response.json();
+    
+    if (!data.errors || data.errors.length === 0) {
+      if (tg && tg.showPopup) {
+        tg.showPopup({ title: 'Caderno de Erros', message: '✅ Parabéns! Você não tem erros registrados!', buttons: [{ type: 'ok' }] });
+      } else {
+        alert('✅ Nenhum erro registrado!');
+      }
+      return;
+    }
+    
+    let txt = `📓 CADERNO DE ERROS (${data.errors.length} registros)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+    for (let i = 0; i < Math.min(data.errors.length, 5); i++) {
+      const e = data.errors[i];
+      txt += `${i+1}. ${e.tema_id}\n❓ ${e.pergunta.substring(0, 80)}...\n✅ ${e.correta}\n\n`;
+    }
+    
+    if (tg && tg.showPopup) {
+      tg.showPopup({ title: 'Meus Erros', message: txt, buttons: [{ type: 'ok' }] });
+    } else {
+      alert(txt);
+    }
+  } catch (error) {
+    console.error('Erro ao carregar erros:', error);
+    showToast('❌ Erro ao carregar erros');
+  }
+}
+
+function initNav() {
+  document.getElementById('nHome').addEventListener('click', () => {
+    document.querySelectorAll('.nav-i').forEach(n => n.classList.remove('act'));
+    document.getElementById('nHome').classList.add('act');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (tg) tg.HapticFeedback?.selectionChanged();
+  });
+  
+  document.getElementById('nRank').addEventListener('click', () => {
+    document.querySelectorAll('.nav-i').forEach(n => n.classList.remove('act'));
+    document.getElementById('nRank').classList.add('act');
+    mostrarRanking();
+    if (tg) tg.HapticFeedback?.selectionChanged();
+  });
+  
+  document.getElementById('nErr').addEventListener('click', () => {
+    document.querySelectorAll('.nav-i').forEach(n => n.classList.remove('act'));
+    document.getElementById('nErr').classList.add('act');
+    mostrarErros();
+    if (tg) tg.HapticFeedback?.selectionChanged();
+  });
+  
+  document.getElementById('nRefresh').addEventListener('click', () => {
+    location.reload();
+  });
+}
+
+window.addEventListener('load', () => {
+  initNav();
+  carregarDadosUsuario();
+});
+
+window.toggleModulo = toggleModulo;
+window.startQuiz = startQuiz;
+</script>
+</body>
+</html>
