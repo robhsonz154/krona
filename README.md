@@ -7,8 +7,7 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-/* ========== SEU CSS ORIGINAL COMPLETO AQUI ========== */
-/* Mantenha todo o CSS que você já tinha no index.html anterior */
+/* ========== CSS COMPLETO ========== */
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
   --bg:#060A13;
@@ -362,7 +361,6 @@ function getUserId() {
   if (tg && tg.initDataUnsafe?.user) {
     return tg.initDataUnsafe.user.id;
   }
-  // Fallback para teste local
   return localStorage.getItem('test_user_id') || 12345;
 }
 
@@ -378,7 +376,6 @@ async function carregarDadosUsuario() {
   const userId = getUserId();
   const userName = getUserName();
   
-  // Atualizar nome
   document.getElementById('uName').textContent = userName;
   const initials = userName.substring(0, 2).toUpperCase();
   document.getElementById('uAv').textContent = initials;
@@ -389,69 +386,44 @@ async function carregarDadosUsuario() {
     
     userData = await response.json();
     
-    // Atualizar UI com dados reais
-    document.getElementById('uXP').textContent = `${userData.xp} XP`;
-    document.getElementById('uLvl').textContent = `Lv.${userData.level}`;
-    document.getElementById('sHits').textContent = userData.acertos;
-    document.getElementById('sTot').textContent = userData.total_questoes;
-    document.getElementById('sPct').textContent = `${userData.percentual_geral}%`;
+    document.getElementById('uXP').textContent = `${userData.xp || 0} XP`;
+    document.getElementById('uLvl').textContent = `Lv.${userData.level || 1}`;
+    document.getElementById('sHits').textContent = userData.acertos || 0;
+    document.getElementById('sTot').textContent = userData.total_questoes || 0;
+    document.getElementById('sPct').textContent = `${userData.percentual_geral || 0}%`;
     
-    const pct = userData.percentual_geral;
+    const pct = userData.percentual_geral || 0;
     document.getElementById('pFill').style.width = `${pct}%`;
     document.getElementById('pPct').textContent = `${pct}%`;
-    document.getElementById('pInfo').textContent = `${userData.temas_completos} de 15 módulos concluídos`;
-    document.getElementById('completedThemes').textContent = `${userData.temas_completos}/15`;
-    document.getElementById('themesPercent').textContent = `${Math.round((userData.temas_completos/15)*100)}%`;
-    document.getElementById('xpTotal').textContent = userData.xp;
+    document.getElementById('pInfo').textContent = `${userData.temas_completos || 0} de 15 módulos concluídos`;
+    document.getElementById('completedThemes').textContent = `${userData.temas_completos || 0}/15`;
+    document.getElementById('themesPercent').textContent = `${Math.round(((userData.temas_completos || 0)/15)*100)}%`;
+    document.getElementById('xpTotal').textContent = userData.xp || 0;
     
-    // Nível do usuário
-    const nextLevelXP = (userData.level) * 200;
-    const xpToNext = nextLevelXP - userData.xp;
-    document.getElementById('nextLevel').textContent = `${xpToNext} XP para Lv.${userData.level + 1}`;
+    const currentLevel = userData.level || 1;
+    const nextLevelXP = currentLevel * 200;
+    const xpToNext = nextLevelXP - (userData.xp || 0);
+    document.getElementById('nextLevel').textContent = `${xpToNext > 0 ? xpToNext : 0} XP para Lv.${currentLevel + 1}`;
     
-    // Badge por nível
+    const nivelBadge = document.getElementById('nivelBadge');
     if (userData.percentual_geral >= 90) {
-      document.getElementById('nivelBadge').textContent = '🏆 Mestre';
-      document.getElementById('nivelBadge').className = 'pnl-badge bg-gold';
+      nivelBadge.textContent = '🏆 Mestre';
     } else if (userData.percentual_geral >= 70) {
-      document.getElementById('nivelBadge').textContent = '🥇 Avançado';
-      document.getElementById('nivelBadge').className = 'pnl-badge bg-gold';
+      nivelBadge.textContent = '🥇 Avançado';
     } else if (userData.percentual_geral >= 50) {
-      document.getElementById('nivelBadge').textContent = '📚 Em Progresso';
-      document.getElementById('nivelBadge').className = 'pnl-badge bg-grn';
+      nivelBadge.textContent = '📚 Em Progresso';
     } else {
-      document.getElementById('nivelBadge').textContent = '🌱 Iniciante';
-      document.getElementById('nivelBadge').className = 'pnl-badge bg-grn';
+      nivelBadge.textContent = '🌱 Iniciante';
     }
     
-    temasStats = userData.temas_stats;
-    
-    // Melhor nota
-    let bestNota = 0;
-    let bestTemaNome = '-';
-    temasStats.forEach(t => {
-      if (t.nota && t.nota > bestNota) {
-        bestNota = t.nota;
-        bestTemaNome = t.nome;
-      }
-    });
-    document.getElementById('bestGrade').textContent = bestNota.toFixed(1);
-    document.getElementById('bestTema').textContent = bestTemaNome;
-    
-    // Carregar erros
     await carregarErros(userId);
-    
-    // Renderizar módulos
+    await carregarTemasStats(userId);
     renderModulos();
-    
-    // Renderizar gráfico
     renderChart();
     
-    return userData;
   } catch (error) {
     console.error('Erro ao carregar dados:', error);
     showToast('❌ Erro ao conectar com o servidor');
-    // Dados mock para teste
     usarDadosMock();
   }
 }
@@ -461,7 +433,7 @@ async function carregarErros(userId) {
     const response = await fetch(`${API_BASE}/api/errors/${userId}?limit=10`);
     if (response.ok) {
       const data = await response.json();
-      const errorCount = data.total || 0;
+      const errorCount = data.errors?.length || 0;
       document.getElementById('errorsCount').textContent = errorCount;
       const errorDot = document.getElementById('errorDot');
       if (errorCount > 0) {
@@ -478,28 +450,57 @@ async function carregarErros(userId) {
   }
 }
 
+async function carregarTemasStats(userId) {
+  try {
+    const response = await fetch(`${API_BASE}/api/user/${userId}`);
+    if (response.ok) {
+      const data = await response.json();
+      const temasList = [
+        "🌾 Contextualização do Agronegócio", "🌱 Sistemas de Produção Sustentável",
+        "🌿 Fundamentos de Botânica", "🧪 Nutrição Mineral e Fertilidade",
+        "💧 Irrigação e Drenagem", "🌽 Principais Culturas",
+        "🐄 Produção Animal", "🔬 Anatomia e Fisiologia Animal",
+        "🍽️ Alimentação e Nutrição Animal", "🌾 Forragicultura e Pastagens",
+        "🧬 Melhoramento Genético Animal", "🐔 Produção de Monogástricos",
+        "🐮 Produção de Ruminantes", "📡 Agricultura de Precisão",
+        "🎁 Simulado Bônus"
+      ];
+      temasStats = [];
+      for (let i = 0; i < temasList.length; i++) {
+        temasStats.push({
+          id: `TEMA_${i+1}`,
+          nome: temasList[i],
+          completado: (data.temas_completos || 0) > i,
+          nota: null,
+          acertos: 0,
+          total: 15
+        });
+      }
+    }
+  } catch (error) {
+    console.error('Erro ao carregar temas:', error);
+  }
+}
+
 function usarDadosMock() {
-  // Dados de exemplo para teste quando API não está disponível
-  document.getElementById('uXP').textContent = '1.250 XP';
-  document.getElementById('uLvl').textContent = 'Lv.12';
-  document.getElementById('sHits').textContent = '87';
-  document.getElementById('sTot').textContent = '116';
-  document.getElementById('sPct').textContent = '75%';
-  document.getElementById('pFill').style.width = '47%';
-  document.getElementById('pPct').textContent = '47%';
-  document.getElementById('pInfo').textContent = '7 de 15 módulos concluídos';
-  document.getElementById('completedThemes').textContent = '7/15';
-  document.getElementById('themesPercent').textContent = '47%';
-  document.getElementById('xpTotal').textContent = '1250';
-  document.getElementById('nextLevel').textContent = '150 XP para Lv.13';
-  document.getElementById('bestGrade').textContent = '9.3';
-  document.getElementById('bestTema').textContent = 'T5 — Irrigação';
-  document.getElementById('errorsCount').textContent = '29';
-  document.getElementById('errorsMsg').textContent = '29 erros para revisar';
+  document.getElementById('uXP').textContent = '0 XP';
+  document.getElementById('uLvl').textContent = 'Lv.1';
+  document.getElementById('sHits').textContent = '0';
+  document.getElementById('sTot').textContent = '0';
+  document.getElementById('sPct').textContent = '0%';
+  document.getElementById('pFill').style.width = '0%';
+  document.getElementById('pPct').textContent = '0%';
+  document.getElementById('pInfo').textContent = '0 de 15 módulos concluídos';
+  document.getElementById('completedThemes').textContent = '0/15';
+  document.getElementById('themesPercent').textContent = '0%';
+  document.getElementById('xpTotal').textContent = '0';
+  document.getElementById('nextLevel').textContent = '200 XP para Lv.2';
+  document.getElementById('bestGrade').textContent = '0';
+  document.getElementById('bestTema').textContent = '-';
+  document.getElementById('errorsCount').textContent = '0';
+  document.getElementById('errorsMsg').textContent = 'Nenhum erro! 🎉';
   
-  // Criar dados mock dos temas
-  temasStats = [];
-  const temasNomes = [
+  const temasList = [
     "🌾 Contextualização do Agronegócio", "🌱 Sistemas de Produção Sustentável",
     "🌿 Fundamentos de Botânica", "🧪 Nutrição Mineral e Fertilidade",
     "💧 Irrigação e Drenagem", "🌽 Principais Culturas",
@@ -509,18 +510,17 @@ function usarDadosMock() {
     "🐮 Produção de Ruminantes", "📡 Agricultura de Precisão",
     "🎁 Simulado Bônus"
   ];
-  
-  for (let i = 0; i < 15; i++) {
+  temasStats = [];
+  for (let i = 0; i < temasList.length; i++) {
     temasStats.push({
       id: `TEMA_${i+1}`,
-      nome: temasNomes[i],
-      completado: i < 7,
-      nota: i === 4 ? 9.3 : i === 3 ? 9.3 : i === 0 ? 8.7 : i === 1 ? 7.3 : i === 2 ? 6.0 : null,
-      acertos: i < 7 ? Math.floor(Math.random() * 15) + 5 : 0,
+      nome: temasList[i],
+      completado: false,
+      nota: null,
+      acertos: 0,
       total: 15
     });
   }
-  
   renderModulos();
   renderChart();
 }
@@ -529,9 +529,10 @@ function renderModulos() {
   if (!temasStats || temasStats.length === 0) return;
   
   const container = document.getElementById('modulosContainer');
+  if (!container) return;
+  
   document.getElementById('temasCount').textContent = `${temasStats.filter(t => t.completado).length}/15 temas`;
   
-  // Agrupar temas em módulos (cada 2 temas por módulo para UI organizada)
   const modulos = [
     { id: 'A', nome: 'Agronegócio & Sustentabilidade', icon: '🌾', iconClass: 'agro', temas: [0, 1] },
     { id: 'B', nome: 'Ciências Vegetais & Solo', icon: '🌿', iconClass: 'veg', temas: [2, 3] },
@@ -549,7 +550,7 @@ function renderModulos() {
   
   for (const mod of modulos) {
     const temasMod = mod.temas.map(idx => temasStats[idx]).filter(t => t);
-    const completosMod = temasMod.filter(t => t.completado).length;
+    const completosMod = temasMod.filter(t => t && t.completado).length;
     const totalMod = temasMod.length;
     const isOpen = modIndex === 0 ? 'open' : '';
     
@@ -576,16 +577,11 @@ function renderModulos() {
     `;
     
     for (const tema of temasMod) {
+      if (!tema) continue;
       const temaNum = tema.id.split('_')[1];
       const completedClass = tema.completado ? 'done' : 'wait';
       const completedText = tema.completado ? (tema.nota ? tema.nota.toFixed(1) : 'Concluído') : 'Iniciar';
-      const tagClass = mod.iconClass === 'agro' ? 'agro' : 
-                       mod.iconClass === 'veg' ? 'veg' :
-                       mod.iconClass === 'agua' ? 'agua' :
-                       mod.iconClass === 'cult' ? 'cult' :
-                       mod.iconClass === 'anim' ? 'anim' :
-                       mod.iconClass === 'gen' ? 'gen' :
-                       mod.iconClass === 'tech' ? 'tech' : 'bonus';
+      const tagClass = mod.iconClass;
       
       html += `
         <div class="tema" onclick="startQuiz('${tema.id}', '${tema.nome}')">
@@ -616,12 +612,13 @@ function renderModulos() {
 
 function renderChart() {
   const chartContainer = document.getElementById('chartContainer');
+  if (!chartContainer) return;
+  
   if (!temasStats || temasStats.length === 0) {
     chartContainer.innerHTML = '<div class="loading">Carregando gráficos...</div>';
     return;
   }
   
-  // Pegar primeiros 6 temas para o gráfico
   const temasParaGrafico = temasStats.slice(0, 6);
   const cores = ['#22C55E', '#10B981', '#3B82F6', '#F59E0B', '#EF4444', '#06B6D4'];
   
@@ -647,6 +644,7 @@ function renderChart() {
 
 function toggleModulo(modId) {
   const el = document.getElementById('mod' + modId);
+  if (!el) return;
   const wasOpen = el.classList.contains('open');
   
   document.querySelectorAll('.mod').forEach(m => {
@@ -701,18 +699,18 @@ async function mostrarRanking() {
     if (!response.ok) throw new Error('Erro ao carregar ranking');
     const data = await response.json();
     
-    let txt = '🏆 *RANKING DA TURMA* 🏆\n━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
+    let txt = '🏆 RANKING DA TURMA 🏆\n━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
     const medals = ['🥇', '🥈', '🥉'];
     
-    for (let i = 0; i < Math.min(data.ranking.length, 10); i++) {
-      const r = data.ranking[i];
-      const medal = medals[i] || `${i+1}.`;
-      const pct = r.total_questoes > 0 ? Math.round((r.total_acertos / r.total_questoes) * 100) : 0;
-      txt += `${medal} *${r.user_name}*\n   ${pct}% · ${r.xp} XP · Lv.${r.level}\n\n`;
-    }
-    
-    if (data.ranking.length === 0) {
+    if (!data.ranking || data.ranking.length === 0) {
       txt += 'Sem dados ainda. Complete um tema!';
+    } else {
+      for (let i = 0; i < Math.min(data.ranking.length, 10); i++) {
+        const r = data.ranking[i];
+        const medal = medals[i] || `${i+1}.`;
+        const pct = r.total_questoes > 0 ? Math.round((r.total_acertos / r.total_questoes) * 100) : 0;
+        txt += `${medal} ${r.user_name}\n   ${pct}% · ${r.xp} XP · Lv.${r.level}\n\n`;
+      }
     }
     
     if (tg && tg.showPopup) {
@@ -735,7 +733,7 @@ async function mostrarErros() {
     if (!response.ok) throw new Error('Erro ao carregar erros');
     const data = await response.json();
     
-    if (data.errors.length === 0) {
+    if (!data.errors || data.errors.length === 0) {
       if (tg && tg.showPopup) {
         tg.showPopup({ title: 'Caderno de Erros', message: '✅ Parabéns! Você não tem erros registrados!', buttons: [{ type: 'ok' }] });
       } else {
@@ -744,10 +742,10 @@ async function mostrarErros() {
       return;
     }
     
-    let txt = `📓 CADERNO DE ERROS (${data.total} registros)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+    let txt = `📓 CADERNO DE ERROS (${data.errors.length} registros)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
     for (let i = 0; i < Math.min(data.errors.length, 5); i++) {
       const e = data.errors[i];
-      txt += `${i+1}. ${e.tema}\n❓ ${e.pergunta.substring(0, 80)}...\n✅ ${e.correta}\n\n`;
+      txt += `${i+1}. ${e.tema_id}\n❓ ${e.pergunta.substring(0, 80)}...\n✅ ${e.correta}\n\n`;
     }
     
     if (tg && tg.showPopup) {
@@ -761,7 +759,6 @@ async function mostrarErros() {
   }
 }
 
-// ================== NAVEGAÇÃO ==================
 function initNav() {
   document.getElementById('nHome').addEventListener('click', () => {
     document.querySelectorAll('.nav-i').forEach(n => n.classList.remove('act'));
@@ -789,13 +786,11 @@ function initNav() {
   });
 }
 
-// ================== INICIALIZAÇÃO ==================
 window.addEventListener('load', () => {
   initNav();
   carregarDadosUsuario();
 });
 
-// Expor funções globalmente
 window.toggleModulo = toggleModulo;
 window.startQuiz = startQuiz;
 </script>
