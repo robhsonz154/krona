@@ -339,11 +339,8 @@ const tg = window.Telegram?.WebApp;
 let userData = null;
 let temasStats = [];
 
-// === API Base URL (substitua pela URL do seu bot quando hospedar) ===
-// Para desenvolvimento local, use ngrok: https://seu-id.ngrok.io
-const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:8080'
-    : 'https://seu-bot.herokuapp.com'; // ALTERE PARA SUA URL REAL
+// === API Base URL ===
+const API_BASE = "https://krona-api.onrender.com";
 
 // ================== INICIALIZAÇÃO ==================
 if (tg) {
